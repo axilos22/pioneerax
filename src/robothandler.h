@@ -1,5 +1,7 @@
 #ifndef ROBOTHANDLER_H
 #define ROBOTHANDLER_H
+//CPP
+#include <vector>
 //ARIA
 #include "Aria.h"
 
@@ -20,9 +22,11 @@ public:
     void getInitialData();
     void activateSonar();
     void activateLaser();
-    void makeKeyHandler();
+    void makeKeyHandler();    
     int wander();
+    std::vector<double> getPose();
     ~Robothandler();
+    void followSquare();
 };
 
 #endif // ROBOTHANDLER_H

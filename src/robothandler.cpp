@@ -56,9 +56,20 @@ void Robothandler::getInitialData(){
 	ArUtil::sleep(3000);
 	
 	//ending robot thread
-	m_robot->stopRunning();
+	//m_robot->stopRunning();
 	//wait for the thread to stop
-	m_robot->waitForRunExit();		
+	//m_robot->waitForRunExit();		
+}
+
+std::vector<double> Robothandler::getPose() {	
+	m_robot->lock();
+	std::vector<double> outPose;
+	outPose.push_back(m_robot->getX());	
+	outPose.push_back(m_robot->getY());
+	outPose.push_back(m_robot->getTh());
+	m_robot->unlock();
+	ArLog::log(ArLog::Normal,"Ax-example: pose=(%.2f,%.2f,%.2f)",m_robot->getX(),m_robot->getY(),m_robot->getTh());
+	return outPose;
 }
 
 void Robothandler::activateSonar()
@@ -87,10 +98,11 @@ void Robothandler::makeKeyHandler()
 
 int Robothandler::wander()
 {
+	ArLog::log(ArLog::Normal,"Ax-example: Starting wondering sequence...");
     //turn on the motors
     m_robot->enableMotors();
     //turn off amigobot sounds
-    m_robot->comInt(ArCommands::SOUNDTOG,0);
+    //m_robot->comInt(ArCommands::SOUNDTOG,0);
     //Wander core: set of actions to make wander bahavior
     ArActionStallRecover recover;
     ArActionBumpers bumpers;
@@ -103,15 +115,22 @@ int Robothandler::wander()
     m_robot->addAction(&avoidFrontFar,49);
     m_robot->addAction(&constantVelocity,25);
 
+	ArLog::log(ArLog::Normal,"Ax-example: Actions are stored, begin wondering in 5s");
+	ArUtil::sleep(1000);
+	ArLog::log(ArLog::Normal,"Ax-example: 4s");
+	ArUtil::sleep(1000);
+	ArLog::log(ArLog::Normal,"Ax-example: 3s");
+	ArUtil::sleep(1000);
+	ArLog::log(ArLog::Normal,"Ax-example: 2s");
+	ArUtil::sleep(1000);
+	ArLog::log(ArLog::Normal,"Ax-example: 1s");
     // wait for robot task loop to end before exiting the program
-    m_robot->waitForRunExit();
-    Aria::exit(0);
+    m_robot->waitForRunExit();    
     return 0;
 }
 
 Robothandler::~Robothandler()
-{
-	
+{	
 	//remove allocation of all elements
 	delete m_parser;
     delete m_robot;
@@ -119,4 +138,35 @@ Robothandler::~Robothandler()
     delete m_sonar;
     delete m_robotConnector;
     delete m_laserConnector;
+}
+
+void Robothandler::followSquare() {
+	getPose();
+	m_robot->enableMotors();
+	for(int i=0;i<4;i++) {
+		//go forward 100mm/s for 3s
+		m_robot->lock();		
+		m_robot->setRotVel(0);
+		m_robot->setVel(300);
+		m_robot->unlock();
+		ArUtil::sleep(3000);
+		
+		//stop
+		m_robot->lock();
+		m_robot->stop();
+		m_robot->unlock();
+		ArUtil::sleep(1000);		
+		
+		//turn 90degrees
+		m_robot->lock();
+		m_robot->setRotVel(-30);
+		m_robot->setVel(0);
+		m_robot->unlock();
+		ArUtil::sleep(3000);
+		
+		getPose();	
+	}	
+	
+	m_robot->stopRunning();
+	m_robot->waitForRunExit();	
 }
