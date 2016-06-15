@@ -15,6 +15,7 @@ public:
     ArSonarDevice* m_sonar;
     ArRobotConnector* m_robotConnector;
     ArLaserConnector* m_laserConnector;
+    ArTime* m_time;
     Robothandler(int argc, char** argv);
     //functions
     int connection();
@@ -27,6 +28,8 @@ public:
     std::vector<double> getPose();
     ~Robothandler();
     void followSquare();
+    const ArTime* getTime();
+    void resetTime();
 };
 
 #endif // ROBOTHANDLER_H

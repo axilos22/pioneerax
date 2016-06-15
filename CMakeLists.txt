@@ -13,7 +13,7 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 find_package(Ceres REQUIRED)
 include_directories(${CERES_INCLUDE_DIRS})
 #INCLUDING FILES
-add_executable(pioneerax src/main.cpp src/robothandler.cpp)
+add_executable(pioneerax src/main.cpp src/robothandler.cpp src/trajectory.cpp)
 #aria class handler
 target_link_libraries(pioneerax ${ARIA_LIBRARY})
 target_link_libraries(pioneerax ${CERES_LIBRARIES})

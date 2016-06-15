@@ -10,12 +10,13 @@ Robothandler::Robothandler(int argc, char **argv)
     m_sonar = new ArSonarDevice();    
     m_robotConnector= new ArRobotConnector(m_parser,m_robot);
     m_laserConnector=new ArLaserConnector(m_parser,m_robot,m_robotConnector);
+    m_time = new ArTime();    
 }
 
 int Robothandler::connection()
 {		
     if(!m_robotConnector->connectRobot()) {
-        ArLog::log(ArLog::Terse, "Ax-Example: Could not connect to the robot.");
+        ArLog::log(ArLog::Terse, "Ax-Example@connection: Could not connect to the robot.");
         if(m_parser->checkHelpAndWarnUnparsed()) {
             Aria::logOptions();
             Aria::exit(1);
@@ -27,17 +28,15 @@ int Robothandler::connection()
         Aria::exit(1);
         return 1;
     }
-    ArLog::log(ArLog::Normal, "Ax-Example: Connected to robot.");
+    ArLog::log(ArLog::Normal, "Ax-Example@connection: Connected to robot.");
     return 0;
 }
 
 int Robothandler::disconnection() {
-	ArLog::log(ArLog::Normal,"Ending robot thread");
+	ArLog::log(ArLog::Normal,"Ax-Example@disconnection Ending robot thread");
 	m_robot->stopRunning();
 	//wait for the thread to stop
 	m_robot->waitForRunExit();
-	//exiting
-	Aria::exit(0);
 	return 0;
 }
 
@@ -169,4 +168,14 @@ void Robothandler::followSquare() {
 	
 	m_robot->stopRunning();
 	m_robot->waitForRunExit();	
+}
+
+const ArTime* Robothandler::getTime() {
+	return m_time;
+}
+
+void Robothandler::resetTime() {
+	//~ m_time->setSec(0);
+	//~ m_time->setMSec(0);	
+	m_time->setToNow();
 }
