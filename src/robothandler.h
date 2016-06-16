@@ -8,7 +8,7 @@
 class Robothandler
 {
 public:
-	//parameter
+    //parameter
     ArArgumentParser* m_parser;
     ArRobot* m_robot;
     ArAnalogGyro* m_gyro;
@@ -23,7 +23,7 @@ public:
     void getInitialData();
     void activateSonar();
     void activateLaser();
-    void makeKeyHandler();    
+    void makeKeyHandler();
     int wander();
     std::vector<double> getPose();
     ~Robothandler();

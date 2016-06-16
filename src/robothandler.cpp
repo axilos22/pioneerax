@@ -7,10 +7,10 @@ Robothandler::Robothandler(int argc, char **argv)
     m_parser->loadDefaultArguments();
     m_robot = new ArRobot;
     m_gyro = new ArAnalogGyro(m_robot);
-    m_sonar = new ArSonarDevice();    
+    m_sonar = new ArSonarDevice();
     m_robotConnector= new ArRobotConnector(m_parser,m_robot);
     m_laserConnector=new ArLaserConnector(m_parser,m_robot,m_robotConnector);
-    m_time = new ArTime();    
+    m_time = new ArTime();
 }
 
 int Robothandler::connection()
@@ -33,42 +33,42 @@ int Robothandler::connection()
 }
 
 int Robothandler::disconnection() {
-	ArLog::log(ArLog::Normal,"Ax-Example@disconnection Ending robot thread");
-	m_robot->stopRunning();
-	//wait for the thread to stop
-	m_robot->waitForRunExit();
-	return 0;
+    ArLog::log(ArLog::Normal,"Ax-Example@disconnection Ending robot thread");
+    m_robot->stopRunning();
+    //wait for the thread to stop
+    m_robot->waitForRunExit();
+    return 0;
 }
 
 void Robothandler::getInitialData(){
-	m_robot->enableMotors();
-	//background robot processing cycle
-	m_robot->runAsync(true);
-	//print some data to SIP
-	m_robot->lock();
-	ArLog::log(ArLog::Normal,"Ax-example: pose=(%.2f,%.2f,%.2f), Trans. Vel=%.2f, Battery=%.2fV",
-		m_robot->getX(),m_robot->getY(),m_robot->getTh(),m_robot->getVel(),m_robot->getBatteryVoltage());
-	m_robot->unlock();
-	
-	//sleep for 3s
-	ArLog::log(ArLog::Normal,"Ax-example: sleeping 3s");
-	ArUtil::sleep(3000);
-	
-	//ending robot thread
-	//m_robot->stopRunning();
-	//wait for the thread to stop
-	//m_robot->waitForRunExit();		
+    m_robot->enableMotors();
+    //background robot processing cycle
+    m_robot->runAsync(true);
+    //print some data to SIP
+    m_robot->lock();
+    ArLog::log(ArLog::Normal,"Ax-example: pose=(%.2f,%.2f,%.2f), Trans. Vel=%.2f, Battery=%.2fV",
+               m_robot->getX(),m_robot->getY(),m_robot->getTh(),m_robot->getVel(),m_robot->getBatteryVoltage());
+    m_robot->unlock();
+
+    //sleep for 3s
+    ArLog::log(ArLog::Normal,"Ax-example: sleeping 3s");
+    ArUtil::sleep(3000);
+
+    //ending robot thread
+    //m_robot->stopRunning();
+    //wait for the thread to stop
+    //m_robot->waitForRunExit();
 }
 
 std::vector<double> Robothandler::getPose() {	
-	m_robot->lock();
-	std::vector<double> outPose;
-	outPose.push_back(m_robot->getX());	
-	outPose.push_back(m_robot->getY());
-	outPose.push_back(m_robot->getTh());
-	m_robot->unlock();
-	ArLog::log(ArLog::Normal,"Ax-example: pose=(%.2f,%.2f,%.2f)",m_robot->getX(),m_robot->getY(),m_robot->getTh());
-	return outPose;
+    m_robot->lock();
+    std::vector<double> outPose;
+    outPose.push_back(m_robot->getX());
+    outPose.push_back(m_robot->getY());
+    outPose.push_back(m_robot->getTh());
+    m_robot->unlock();
+    ArLog::log(ArLog::Normal,"Ax-example: pose=(%.2f,%.2f,%.2f)",m_robot->getX(),m_robot->getY(),m_robot->getTh());
+    return outPose;
 }
 
 void Robothandler::activateSonar()
@@ -97,7 +97,7 @@ void Robothandler::makeKeyHandler()
 
 int Robothandler::wander()
 {
-	ArLog::log(ArLog::Normal,"Ax-example: Starting wondering sequence...");
+    ArLog::log(ArLog::Normal,"Ax-example: Starting wondering sequence...");
     //turn on the motors
     m_robot->enableMotors();
     //turn off amigobot sounds
@@ -114,24 +114,24 @@ int Robothandler::wander()
     m_robot->addAction(&avoidFrontFar,49);
     m_robot->addAction(&constantVelocity,25);
 
-	ArLog::log(ArLog::Normal,"Ax-example: Actions are stored, begin wondering in 5s");
-	ArUtil::sleep(1000);
-	ArLog::log(ArLog::Normal,"Ax-example: 4s");
-	ArUtil::sleep(1000);
-	ArLog::log(ArLog::Normal,"Ax-example: 3s");
-	ArUtil::sleep(1000);
-	ArLog::log(ArLog::Normal,"Ax-example: 2s");
-	ArUtil::sleep(1000);
-	ArLog::log(ArLog::Normal,"Ax-example: 1s");
+    ArLog::log(ArLog::Normal,"Ax-example: Actions are stored, begin wondering in 5s");
+    ArUtil::sleep(1000);
+    ArLog::log(ArLog::Normal,"Ax-example: 4s");
+    ArUtil::sleep(1000);
+    ArLog::log(ArLog::Normal,"Ax-example: 3s");
+    ArUtil::sleep(1000);
+    ArLog::log(ArLog::Normal,"Ax-example: 2s");
+    ArUtil::sleep(1000);
+    ArLog::log(ArLog::Normal,"Ax-example: 1s");
     // wait for robot task loop to end before exiting the program
-    m_robot->waitForRunExit();    
+    m_robot->waitForRunExit();
     return 0;
 }
 
 Robothandler::~Robothandler()
 {	
-	//remove allocation of all elements
-	delete m_parser;
+    //remove allocation of all elements
+    delete m_parser;
     delete m_robot;
     delete m_gyro;
     delete m_sonar;
@@ -140,42 +140,42 @@ Robothandler::~Robothandler()
 }
 
 void Robothandler::followSquare() {
-	getPose();
-	m_robot->enableMotors();
-	for(int i=0;i<4;i++) {
-		//go forward 100mm/s for 3s
-		m_robot->lock();		
-		m_robot->setRotVel(0);
-		m_robot->setVel(300);
-		m_robot->unlock();
-		ArUtil::sleep(3000);
-		
-		//stop
-		m_robot->lock();
-		m_robot->stop();
-		m_robot->unlock();
-		ArUtil::sleep(1000);		
-		
-		//turn 90degrees
-		m_robot->lock();
-		m_robot->setRotVel(-30);
-		m_robot->setVel(0);
-		m_robot->unlock();
-		ArUtil::sleep(3000);
-		
-		getPose();	
-	}	
-	
-	m_robot->stopRunning();
-	m_robot->waitForRunExit();	
+    getPose();
+    m_robot->enableMotors();
+    for(int i=0;i<4;i++) {
+        //go forward 100mm/s for 3s
+        m_robot->lock();
+        m_robot->setRotVel(0);
+        m_robot->setVel(300);
+        m_robot->unlock();
+        ArUtil::sleep(3000);
+
+        //stop
+        m_robot->lock();
+        m_robot->stop();
+        m_robot->unlock();
+        ArUtil::sleep(1000);
+
+        //turn 90degrees
+        m_robot->lock();
+        m_robot->setRotVel(-30);
+        m_robot->setVel(0);
+        m_robot->unlock();
+        ArUtil::sleep(3000);
+
+        getPose();
+    }
+
+    m_robot->stopRunning();
+    m_robot->waitForRunExit();
 }
 
 const ArTime* Robothandler::getTime() {
-	return m_time;
+    return m_time;
 }
 
 void Robothandler::resetTime() {
-	//~ m_time->setSec(0);
-	//~ m_time->setMSec(0);	
-	m_time->setToNow();
+    //~ m_time->setSec(0);
+    //~ m_time->setMSec(0);
+    m_time->setToNow();
 }
