@@ -65,9 +65,10 @@ std::vector<double> Robothandler::getPose() {
     std::vector<double> outPose;
     outPose.push_back(m_robot->getX());
     outPose.push_back(m_robot->getY());
-    outPose.push_back(m_robot->getTh());
+    outPose.push_back(m_robot->getTh()); //getting heading in degree
+    //~ outPose.push_back(m_robot->getThRad());
     m_robot->unlock();
-    ArLog::log(ArLog::Normal,"Ax-example: pose=(%.2f,%.2f,%.2f)",m_robot->getX(),m_robot->getY(),m_robot->getTh());
+    //~ ArLog::log(ArLog::Normal,"Ax-example: pose=(%.2f,%.2f,%.2f)",m_robot->getX(),m_robot->getY(),m_robot->getTh());
     return outPose;
 }
 
@@ -178,4 +179,18 @@ void Robothandler::resetTime() {
     //~ m_time->setSec(0);
     //~ m_time->setMSec(0);
     m_time->setToNow();
+}
+
+void Robothandler::setCommand(double v, double w) {
+	m_robot->lock();
+	m_robot->setRotVel(w);
+	m_robot->setVel(v);
+	m_robot->unlock();
+	ArUtil::sleep(400); //400ms sampling period
+}
+
+void Robothandler::prepareToMove() {
+	m_robot->enableMotors();
+    //background robot processing cycle
+    m_robot->runAsync(true);
 }

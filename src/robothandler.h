@@ -30,6 +30,8 @@ public:
     void followSquare();
     const ArTime* getTime();
     void resetTime();
+    void setCommand(double v, double w);
+    void prepareToMove();
 };
 
 #endif // ROBOTHANDLER_H
