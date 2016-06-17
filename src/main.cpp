@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
         while(Aria::getRunning() && loop < 10) {
             std::cout << "############### @main " << "[" << loop << "] ###############" << std::endl;          
             Eigen::Vector2d v_w = tr.trajectorySequence(rh.getTime()->secSince(),rh.getPoseEigen());
-            //~ rh.setCommand(v_w(0,0),v_w(1,0));
+            rh.setCommand(v_w(0,0),v_w(1,0));
             loop++;
         }
         rh.disconnection();
