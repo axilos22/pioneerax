@@ -1,0 +1,220 @@
+pioneer_project@Pioneer:~/Projet/Projet_Pioneer/pioneerax/build$ ./pioneerax -robotPort /dev/ttyUSB0 
+Could not connect to simulator, connecting to robot through serial port /dev/ttyUSB0.
+Syncing 0
+Syncing 1
+Syncing 2
+Connected to robot.
+Name: Robosoft_3593
+Type: Pioneer
+Subtype: p3at-sh
+ArConfig: Config version: 2.0
+Loaded robot parameters from /usr/local/Aria/params/p3at-sh.p
+ArRobotConnector: Connecting to MTX batteries (if neccesary)...
+ArRobotConnector: Connecting to MTX sonar (if neccesary)...
+ArLaserConnector: Using robot params for connecting to laser 1 (lms2xx_1)
+ArLaserConnector: Set serial port to open /dev/ttyS2
+Ax-Example@connection: Connected to robot.
+You may press escape to exit
+Ax-example@main : Begin control in 3s
+############### @main [0] ###############
+robot time= 2s
+@trajSeq Desired Pos vector 
+  294.02
+59.6008
+@trajSeq Updated robot pose 
+ 0
+0
+0
+@computeErr m_pose X =0
+@computeErr m_pose Y =0
+@computeErr desiredPos = 294.02
+59.6008
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+  294.02
+59.6008
+@trajSeq CMD= 
+  294.02
+1.19202
+############### @main [1] ###############
+robot time= 3s
+@trajSeq Desired Pos vector 
+ 286.601
+88.6561
+@trajSeq Updated robot pose 
+       11
+       0
+0.175325
+@computeErr m_pose X =11
+@computeErr m_pose Y =0
+@computeErr desiredPos =286.601
+88.6561
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 275.601
+88.6561
+@trajSeq CMD= 
+ 271.067
+49.8185
+############### @main [2] ###############
+robot time= 3s
+@trajSeq Desired Pos vector 
+ 286.601
+88.6561
+@trajSeq Updated robot pose 
+     68
+     1
+4.2078
+@computeErr m_pose X =68
+@computeErr m_pose Y =1
+@computeErr desiredPos =286.601
+88.6561
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 218.601
+87.6561
+@trajSeq CMD= 
+ -104.147
+-192.205
+############### @main [3] ###############
+robot time= 4s
+@trajSeq Desired Pos vector 
+ 276.318
+116.826
+@trajSeq Updated robot pose 
+     148
+     16
+16.0422
+@computeErr m_pose X =148
+@computeErr m_pose Y =16
+@computeErr desiredPos =276.318
+116.826
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 128.318
+100.826
+@trajSeq CMD= 
+ -120.554
+ -44.005
+############### @main [4] ###############
+robot time= 4s
+@trajSeq Desired Pos vector 
+ 276.318
+116.826
+@trajSeq Updated robot pose 
+     184
+     26
+13.9383
+@computeErr m_pose X =184
+@computeErr m_pose Y =26
+@computeErr desiredPos =276.318
+116.826
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 92.3183
+90.8255
+@trajSeq CMD= 
+ 16.4536
+90.8584
+############### @main [5] ###############
+robot time= 4s
+@trajSeq Desired Pos vector 
+ 276.318
+116.826
+@trajSeq Updated robot pose 
+     190
+     27
+3.15585
+@computeErr m_pose X =190
+@computeErr m_pose Y =27
+@computeErr desiredPos =276.318
+116.826
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 86.3183
+89.8255
+@trajSeq CMD= 
+ -86.2839
+-3.02709
+############### @main [6] ###############
+robot time= 5s
+@trajSeq Desired Pos vector 
+ 263.275
+143.828
+@trajSeq Updated robot pose 
+     185
+     27
+1.84091
+@computeErr m_pose X =185
+@computeErr m_pose Y =27
+@computeErr desiredPos =263.275
+143.828
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 78.2748
+116.828
+@trajSeq CMD= 
+ -23.139
+ 74.813
+############### @main [7] ###############
+robot time= 5s
+@trajSeq Desired Pos vector 
+ 263.275
+143.828
+@trajSeq Updated robot pose 
+     165
+     26
+2.19156
+@computeErr m_pose X =165
+@computeErr m_pose Y =26
+@computeErr desiredPos =263.275
+143.828
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 98.2748
+117.828
+@trajSeq CMD= 
+ -59.0793
+ 78.5692
+############### @main [8] ###############
+robot time= 6s
+@trajSeq Desired Pos vector 
+ 247.601
+169.393
+@trajSeq Updated robot pose 
+     148
+     24
+15.5163
+@computeErr m_pose X =148
+@computeErr m_pose Y =24
+@computeErr desiredPos =247.601
+169.393
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 99.6007
+145.393
+@trajSeq CMD= 
+ -98.3303
+ 16.1215
+############### @main [9] ###############
+robot time= 6s
+@trajSeq Desired Pos vector 
+ 247.601
+169.393
+@trajSeq Updated robot pose 
+     120
+      9
+37.2566
+@computeErr m_pose X =120
+@computeErr m_pose Y =9
+@computeErr desiredPos =247.601
+169.393
+@computeErr SUBBED
+@trajSeq  ERROR vector 
+ 127.601
+160.393
+@trajSeq CMD= 
+  116.683
+-51.7434
+Ax-Example@disconnection Ending robot thread
+Disconnecting from robot.
