@@ -36,6 +36,7 @@ public:
     const Eigen::Vector3d getRobotPose();
     void setGain(const double gain);
     Eigen::Vector2d computeCommands();
+    Eigen::Vector2d trajectorySequence(const double time_s, std::vector<double> pos);
 };
 
 #endif // ROBOTHANDLER_H

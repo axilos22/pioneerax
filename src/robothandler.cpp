@@ -100,7 +100,7 @@ int Robothandler::wander()
 {
     ArLog::log(ArLog::Normal,"Ax-example: Starting wondering sequence...");
     //turn on the motors
-    m_robot->enableMotors();
+    //m_robot->enableMotors();
     //turn off amigobot sounds
     //m_robot->comInt(ArCommands::SOUNDTOG,0);
     //Wander core: set of actions to make wander bahavior

@@ -15,8 +15,33 @@
 
 #define SUCCESSFUL_EXE_CODE 0
 #define CONNECTION_FAILED_CODE 2
-
-void trajectorySequence(Robothandler &rh) {	
+/**
+ * @brief makeRobotWander make the robot wander (normally)
+ * @param rh the robot handler
+ */
+void makeRobotWander(Robothandler &rh) {
+    int retCode = rh.connection();
+    if(!retCode) {
+        rh.prepareToMove();
+        rh.wander();
+        rh.disconnection();
+    } else {
+        ArLog::log(ArLog::Normal, "Ax-Example@main: Unable to connect to robot. Abort");
+    }
+}
+/**
+ * @brief squareTrajectory make the robot follow a square trajectory
+ * @param rh the robot handler
+ */
+void squareTrajectory(Robothandler &rh) {
+    int retCode = rh.connection();
+    if(!retCode) {
+        rh.prepareToMove();
+        rh.followSquare();
+        rh.disconnection();
+    } else {
+        ArLog::log(ArLog::Normal, "Ax-Example@main: Unable to connect to robot. Abort");
+    }
 }
 
 int main(int argc, char** argv) {    
@@ -30,19 +55,9 @@ int main(int argc, char** argv) {
     tr.setInitialPose(0,0,0);
     if(!retCode) {
         while(Aria::getRunning() && loop < 10) {
-            std::cout << "[" << loop << "]" << std::endl;
+            std::cout << "##### @main " <<"[" << loop << "] #####" << std::endl;
             //Start of traj sequence
-            //~ std::cout << "robot time= " << rh.getTime()->secSince() << "s" << std::endl;
-            //~ std::cout << "robot time= " << rh.getTime()->mSecSince() << "ms" << std::endl;
-            tr.updateTime(rh.getTime()->secSince());
-            tr.computeDesired();
-            std::cout <<"@main-Desired Pos vector \n "<< tr.getDesiredPosition() << std::endl;
-            tr.updateRobotPose(rh.getPose());
-            std::cout <<"@main Updated robot pose \n "<< tr.getRobotPose() << std::endl;
-            tr.computeError();
-            std::cout <<"@main  ERROR vector \n "<< tr.getErrorPosition() << std::endl;
-            Eigen::Vector2d v_w= tr.computeCommands();
-            std::cout <<"@main CMD= \n "<< v_w << std::endl;
+            Eigen::Vector2d v_w = tr.trajectorySequence(rh.getTime()->secSince(),rh.getPose());
             //end of traj seq
             rh.setCommand(v_w(0,0),v_w(1,0));
             loop++;
@@ -60,8 +75,4 @@ int main(int argc, char** argv) {
 /* Test functions 
 * get some initial data after connection
 rh.getInitialData();
-* make the robot wander (normally)
-rh.wander();
-* make the robot follow a square trajectory
-rh.followSquare();
-* */
+*/

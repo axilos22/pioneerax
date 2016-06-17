@@ -30,14 +30,19 @@ void Trajectory::setInitialPose(const std::vector<double> pos)
     m_initialPose(1,0)=pos.at(1);
     m_initialPose(2,0)=pos.at(2);
 }
-
-void Trajectory::computeDesired() {
+/**
+ * @brief Trajectory::computeDesired compute the desired position and its derivative.
+ */
+void Trajectory::computeDesired() {   
     m_desiredPosition(0,0)= m_radius*cos(m_angularSpeed*m_time_s);
     m_desiredPosition(1,0)= m_radius*sin(m_angularSpeed*m_time_s);
     m_desiredPositionDot(0,0)=-m_angularSpeed*m_radius*sin(m_angularSpeed*m_time_s);
     m_desiredPositionDot(1,0)=m_angularSpeed*m_radius*cos(m_angularSpeed*m_time_s);
 }
-
+/**
+ * @brief Trajectory::updateRobotPose get the robot pose from the phisical robot for the control.
+ * @param pos the position of the robot (x,y)
+ */
 void Trajectory::updateRobotPose(const std::vector<double> pos) {
     m_pose(0,0) = pos.at(0);
     m_pose(1,0)= pos.at(1);
@@ -88,4 +93,26 @@ Eigen::Vector2d Trajectory::computeCommands() {
     //~ v_w = invK*m_desiredPositionDot;
     return v_w;
 
+}
+/**
+ * @brief Trajectory::trajectorySequence executes the full sequence to compute commands
+ * @param time_s the current time for the robot (s)
+ * @param pos the current position of the robot (mm)
+ * @return
+ */
+Eigen::Vector2d Trajectory::trajectorySequence(const double time_s, std::vector<double> pos)
+{
+    //Start of traj sequence
+    //~ std::cout << "robot time= " << rh.getTime()->secSince() << "s" << std::endl;
+    //~ std::cout << "robot time= " << rh.getTime()->mSecSince() << "ms" << std::endl;
+    updateTime(time_s);
+    computeDesired();
+    std::cout <<"@trajSeq Desired Pos vector \n "<< getDesiredPosition() << std::endl;
+    updateRobotPose(pos);
+    std::cout <<"@trajSeq Updated robot pose \n "<< getRobotPose() << std::endl;
+    computeError();
+    std::cout <<"@trajSeq  ERROR vector \n "<< getErrorPosition() << std::endl;
+    Eigen::Vector2d v_w= computeCommands();
+    std::cout <<"@trajSeq CMD= \n "<< v_w << std::endl;
+    return v_w;
 }
