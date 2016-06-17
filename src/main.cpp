@@ -22,7 +22,7 @@
 void makeRobotWander(Robothandler &rh) {
     int retCode = rh.connection();
     if(!retCode) {
-		rh.makeKeyHandler();
+        rh.makeKeyHandler();
         rh.prepareToMove();
         rh.wander();
         rh.disconnection();
@@ -37,7 +37,7 @@ void makeRobotWander(Robothandler &rh) {
 void squareTrajectory(Robothandler &rh) {
     int retCode = rh.connection();
     if(!retCode) {
-		rh.makeKeyHandler();
+        rh.makeKeyHandler();
         rh.prepareToMove();
         rh.followSquare();
         rh.disconnection();
@@ -49,17 +49,17 @@ void squareTrajectory(Robothandler &rh) {
 int main(int argc, char** argv) {    		
     Robothandler rh(argc,argv);
     Trajectory tr(700,.01,0); //radius (mm) ,angular speed (rad/s) and error gain
-    int retCode = rh.connection();        
+    int retCode = rh.connection();
     if(!retCode) { //if we connected
-		rh.makeKeyHandler();
-	    rh.prepareToMove();
-	    tr.setInitialPose(0,0,0);
-		int loop = 0;
-		ArLog::log(ArLog::Normal,"Ax-example@main : Begin control in 3s");
-		ArUtil::sleep(3000);
-		rh.resetTime(); //reset time for the control algorithm
+        rh.makeKeyHandler();
+        rh.prepareToMove();
+        tr.setInitialPose(0,0,0);
+        int loop = 0;
+        ArLog::log(ArLog::Normal,"Ax-example@main : Begin control in 3s");
+        ArUtil::sleep(3000);
+        rh.resetTime(); //reset time for the control algorithm
         while(Aria::getRunning() && loop < 10) {
-            std::cout << "############### @main " << "[" << loop << "] ###############" << std::endl;          
+            std::cout << "############### @main " << "[" << loop << "] ###############" << std::endl;
             Eigen::Vector2d v_w = tr.trajectorySequence(rh.getTime()->secSince(),rh.getPoseEigen());
             rh.setCommand(v_w(0,0),v_w(1,0));
             loop++;

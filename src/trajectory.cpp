@@ -8,9 +8,9 @@ Trajectory::Trajectory(double radius, double w, double errGain)
     m_gain = errGain;
     m_d = 50; //50mm
     std::cout << "New trajectory generated. type=circular R=" << m_radius
-		<< " W=" << m_angularSpeed 
-		<< "Kerr="<< m_gain 
-		<< "d=" << m_d << std::endl;
+              << " W=" << m_angularSpeed
+              << "Kerr="<< m_gain
+              << "d=" << m_d << std::endl;
 }
 
 Trajectory::~Trajectory(){    
@@ -47,30 +47,30 @@ void Trajectory::computeDesired() {
  * @param pos the position of the robot (x,y)
  */
 void Trajectory::updateRobotPose(const std::vector<double> pos) {
-	if(pos.size() != 3) {
-		std::cout << "WARNING: Unexpected size of the pose. " << std::endl;
-	}
+    if(pos.size() != 3) {
+        std::cout << "WARNING: Unexpected size of the pose. " << std::endl;
+    }
     m_pose(0,0) = pos.at(0);
     m_pose(1,0)= pos.at(1);
     m_pose(2,0)= degree2rad(pos.at(2));
 }
 
 //~ void Trajectory::updateRobotPose(const Eigen::Vector2d position) {
-	//~ m_pose(0,0)=position(0,0);
-	//~ m_pose(1,0)=position(1,0);
-	//~ //no information about orientation here.
-	//~ m_pose(2,0)=0;
+//~ m_pose(0,0)=position(0,0);
+//~ m_pose(1,0)=position(1,0);
+//~ //no information about orientation here.
+//~ m_pose(2,0)=0;
 //~ }
 
 void Trajectory::updateRobotPose(const Eigen::Vector3d pose) {
-	m_pose = pose;	
-	m_pose(2,0)= degree2rad(pose(2,0));
+    m_pose = pose;
+    m_pose(2,0)= degree2rad(pose(2,0));
 }
 
 void Trajectory::computeError() {	    
     //~ std::cout << "m_pose =" << m_pose << std::endl;
     //~ std::cout << "@computeErr m_pose X =" << m_pose(0,0) << std::endl;
-    //~ std::cout << "@computeErr m_pose Y =" << m_pose(1,0) << std::endl;    
+    //~ std::cout << "@computeErr m_pose Y =" << m_pose(1,0) << std::endl;
     Eigen::Vector2d currentPosition(m_pose(0,0),m_pose(1,0));
     //~ std::cout << "@computeErr desiredPos =" << m_desiredPosition << std::endl;
     m_errorPosition = m_desiredPosition-currentPosition;
@@ -142,18 +142,18 @@ Eigen::Vector2d Trajectory::trajectorySequence(const double time_s, Eigen::Vecto
 }
 
 void Trajectory::addDPart() {
-	m_pose(0,0)+=m_d*cos(m_pose(2,0)); // Hx = x + cos(th)
-	m_pose(1,0)+=m_d*sin(m_pose(2,0)); // Hy = y + sin(th)
+    m_pose(0,0)+=m_d*cos(m_pose(2,0)); // Hx = x + cos(th)
+    m_pose(1,0)+=m_d*sin(m_pose(2,0)); // Hy = y + sin(th)
 }
 
 void Trajectory::addDesiredDerivatives() {
-	m_W = m_errorPosition + m_desiredPositionDot;
+    m_W = m_errorPosition + m_desiredPositionDot;
 }
 
 double Trajectory::rad2degree(double radValue) {
-	return (radValue*180.0)/M_PI;
+    return (radValue*180.0)/M_PI;
 }
 
 double Trajectory::degree2rad(double degValue) {
-	return (degValue*M_PI)/180.0;
+    return (degValue*M_PI)/180.0;
 }

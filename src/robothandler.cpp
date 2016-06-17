@@ -74,18 +74,18 @@ std::vector<double> Robothandler::getPose() {
 }
 
 Eigen::Vector2d Robothandler::getPositionEigen() {	
-	m_robot->lock();
-	Eigen::Vector2d position(m_robot->getX(),m_robot->getY());
-	m_robot->unlock();
-	return position;
+    m_robot->lock();
+    Eigen::Vector2d position(m_robot->getX(),m_robot->getY());
+    m_robot->unlock();
+    return position;
 }
 
 Eigen::Vector3d Robothandler::getPoseEigen() {
-	m_robot->lock();
-	//heading is given between [-180,180]
-	Eigen::Vector3d pose(m_robot->getX(),m_robot->getY(),m_robot->getTh());
-	m_robot->unlock();
-	return pose;
+    m_robot->lock();
+    //heading is given between [-180,180]
+    Eigen::Vector3d pose(m_robot->getX(),m_robot->getY(),m_robot->getTh());
+    m_robot->unlock();
+    return pose;
 }
 
 void Robothandler::activateSonar()
@@ -105,7 +105,7 @@ void Robothandler::activateLaser()
 
 void Robothandler::makeKeyHandler()
 {
-    //Make a key handler, so that escape will shut down the program    
+    //Make a key handler, so that escape will shut down the program
     Aria::setKeyHandler(m_keyHandler);
     m_robot->attachKeyHandler(m_keyHandler);
     printf("You may press escape to exit\n");
@@ -198,7 +198,7 @@ void Robothandler::resetTime() {
 }
 
 void Robothandler::setCommand(double v, double w) {
-    m_robot->lock();    
+    m_robot->lock();
     m_robot->setVel(v);
     m_robot->setRotVel(w); //set in degree per second
     m_robot->unlock();
