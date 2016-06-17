@@ -42,6 +42,8 @@ public:
     Eigen::Vector2d trajectorySequence(const double time_s, Eigen::Vector3d position);
     void addDPart();
     void addDesiredDerivatives();
+    double rad2degree(double radValue);
+    double degree2rad(double degValue);
 };
 
 #endif // ROBOTHANDLER_H

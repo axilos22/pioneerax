@@ -83,7 +83,7 @@ Eigen::Vector2d Robothandler::getPositionEigen() {
 Eigen::Vector3d Robothandler::getPoseEigen() {
 	m_robot->lock();
 	//heading is given between [-180,180]
-	Eigen::Vector3d pose(m_robot->getX(),m_robot->getY(),getTh());
+	Eigen::Vector3d pose(m_robot->getX(),m_robot->getY(),m_robot->getTh());
 	m_robot->unlock();
 	return pose;
 }

@@ -7,6 +7,10 @@ Trajectory::Trajectory(double radius, double w, double errGain)
     m_angularSpeed = w; //rotational speed along circle (rad/s)
     m_gain = errGain;
     m_d = 50; //50mm
+    std::cout << "New trajectory generated. type=circular R=" << m_radius
+		<< " W=" << m_angularSpeed 
+		<< "Kerr="<< m_gain 
+		<< "d=" << m_d << std::endl;
 }
 
 Trajectory::~Trajectory(){    
@@ -48,7 +52,7 @@ void Trajectory::updateRobotPose(const std::vector<double> pos) {
 	}
     m_pose(0,0) = pos.at(0);
     m_pose(1,0)= pos.at(1);
-    m_pose(2,0)= pos.at(2);
+    m_pose(2,0)= degree2rad(pos.at(2));
 }
 
 //~ void Trajectory::updateRobotPose(const Eigen::Vector2d position) {
@@ -60,6 +64,7 @@ void Trajectory::updateRobotPose(const std::vector<double> pos) {
 
 void Trajectory::updateRobotPose(const Eigen::Vector3d pose) {
 	m_pose = pose;	
+	m_pose(2,0)= degree2rad(pose(2,0));
 }
 
 void Trajectory::computeError() {	    
@@ -131,6 +136,8 @@ Eigen::Vector2d Trajectory::trajectorySequence(const double time_s, Eigen::Vecto
     addDesiredDerivatives(); //take the desired derivatives for control
     Eigen::Vector2d v_w = computeCommands();
     std::cout <<"@trajSeq CMD= \n "<< v_w << std::endl;
+    //convert lateral speed to rad/s
+    v_w(1,0) = rad2degree(v_w(1,0));
     return v_w;
 }
 
@@ -141,4 +148,12 @@ void Trajectory::addDPart() {
 
 void Trajectory::addDesiredDerivatives() {
 	m_W = m_errorPosition + m_desiredPositionDot;
+}
+
+double Trajectory::rad2degree(double radValue) {
+	return (radValue*180.0)/M_PI;
+}
+
+double Trajectory::degree2rad(double degValue) {
+	return (degValue*M_PI)/180.0;
 }

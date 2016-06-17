@@ -7,7 +7,6 @@
 #include "Aria.h"
 //EIGEN
 #include <Eigen/Dense>
-#define _USE_MATH_DEFINES
 
 class Robothandler
 {
