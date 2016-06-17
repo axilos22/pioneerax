@@ -6,7 +6,7 @@ Trajectory::Trajectory(double radius, double w, double errGain)
     m_radius = radius; //radius of the circle 1m
     m_angularSpeed = w; //rotational speed along circle .1 rad/s
     m_gain = errGain;
-    m_d = 50; //50mm  
+    m_d = 50; //50mm
 }
 
 Trajectory::~Trajectory()
@@ -50,7 +50,7 @@ void Trajectory::computeError() {
     std::cout << "@computeErr m_pose X =" << m_pose(0,0) << std::endl;
     std::cout << "@computeErr m_pose Y =" << m_pose(1,0) << std::endl;
     currentPosition(m_pose(0,0));
-    currentPosition(m_pose(1,0));    
+    currentPosition(m_pose(1,0));
     std::cout << "@computeErr desiredPos =" << m_desiredPosition << std::endl;
     m_errorPosition = m_desiredPosition-currentPosition;
     std::cout << "@computeErr SUBBED" << std::endl;
@@ -69,7 +69,7 @@ const Eigen::Vector2d Trajectory::getDesiredPosition()
 
 const Eigen::Vector3d Trajectory::getRobotPose()
 {
-	return m_pose;
+    return m_pose;
 }
 
 void Trajectory::setGain(const double gain)
@@ -78,14 +78,14 @@ void Trajectory::setGain(const double gain)
 }
 
 Eigen::Vector2d Trajectory::computeCommands() {
-	Eigen::Matrix2d invK(2,2);
-	double th = m_pose(2,0);
-	//~ std::cout << "THETA =" << th << std::endl;
-	invK << cos(th), sin(th),(-1/m_d)*sin(th), (1/m_d)*cos(th);
-	//~ std::cout <<"TRAJECTORY --- INV K mat" << invK << std::endl;
-	//~ std::cout <<"TRAJECTORY --- ERR POS" << m_errorPosition << std::endl;
-	Eigen::Vector2d v_w = invK*m_errorPosition;
-	//~ v_w = invK*m_desiredPositionDot;
-	return v_w;
-		
+    Eigen::Matrix2d invK(2,2);
+    double th = m_pose(2,0);
+    //~ std::cout << "THETA =" << th << std::endl;
+    invK << cos(th), sin(th),(-1/m_d)*sin(th), (1/m_d)*cos(th);
+    //~ std::cout <<"TRAJECTORY --- INV K mat" << invK << std::endl;
+    //~ std::cout <<"TRAJECTORY --- ERR POS" << m_errorPosition << std::endl;
+    Eigen::Vector2d v_w = invK*m_errorPosition;
+    //~ v_w = invK*m_desiredPositionDot;
+    return v_w;
+
 }

@@ -182,15 +182,15 @@ void Robothandler::resetTime() {
 }
 
 void Robothandler::setCommand(double v, double w) {
-	m_robot->lock();
-	m_robot->setRotVel(w);
-	m_robot->setVel(v);
-	m_robot->unlock();
-	ArUtil::sleep(400); //400ms sampling period
+    m_robot->lock();
+    m_robot->setRotVel(w);
+    m_robot->setVel(v);
+    m_robot->unlock();
+    ArUtil::sleep(400); //400ms sampling period
 }
 
 void Robothandler::prepareToMove() {
-	m_robot->enableMotors();
+    m_robot->enableMotors();
     //background robot processing cycle
     m_robot->runAsync(true);
 }

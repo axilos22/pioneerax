@@ -1,6 +1,0 @@
-#include "Aria.h"
-
-int main(int argc, char** argv) {
-    Aria::init();
-    ArArgumentParser parser(&argc,argv);
-}

@@ -24,28 +24,28 @@ int main(int argc, char** argv) {
     Trajectory tr(150,.1); //radius (mm) and angular speed (rad/s)
     int retCode = rh.connection();
     int loop = 0;
-    //~ ArLog::log(ArLog::Normal, "Ax-Example@main: Connection OK");    
+    //~ ArLog::log(ArLog::Normal, "Ax-Example@main: Connection OK");
     rh.prepareToMove();
     rh.resetTime();
     tr.setInitialPose(0,0,0);
-    if(!retCode) {                
+    if(!retCode) {
         while(Aria::getRunning() && loop < 10) {
-		std::cout << "[" << loop << "]" << std::endl;
-        //Start of traj sequence
-        //~ std::cout << "robot time= " << rh.getTime()->secSince() << "s" << std::endl;
-        //~ std::cout << "robot time= " << rh.getTime()->mSecSince() << "ms" << std::endl;
-        tr.updateTime(rh.getTime()->secSince());
-        tr.computeDesired();
-        std::cout <<"@main-Desired Pos vector \n "<< tr.getDesiredPosition() << std::endl;
-        tr.updateRobotPose(rh.getPose());        
-        std::cout <<"@main Updated robot pose \n "<< tr.getRobotPose() << std::endl;
-        tr.computeError();        
-        std::cout <<"@main  ERROR vector \n "<< tr.getErrorPosition() << std::endl;
-        Eigen::Vector2d v_w= tr.computeCommands();
-        std::cout <<"@main CMD= \n "<< v_w << std::endl;
-        //end of traj seq        
-        rh.setCommand(v_w(0,0),v_w(1,0));
-        loop++;
+            std::cout << "[" << loop << "]" << std::endl;
+            //Start of traj sequence
+            //~ std::cout << "robot time= " << rh.getTime()->secSince() << "s" << std::endl;
+            //~ std::cout << "robot time= " << rh.getTime()->mSecSince() << "ms" << std::endl;
+            tr.updateTime(rh.getTime()->secSince());
+            tr.computeDesired();
+            std::cout <<"@main-Desired Pos vector \n "<< tr.getDesiredPosition() << std::endl;
+            tr.updateRobotPose(rh.getPose());
+            std::cout <<"@main Updated robot pose \n "<< tr.getRobotPose() << std::endl;
+            tr.computeError();
+            std::cout <<"@main  ERROR vector \n "<< tr.getErrorPosition() << std::endl;
+            Eigen::Vector2d v_w= tr.computeCommands();
+            std::cout <<"@main CMD= \n "<< v_w << std::endl;
+            //end of traj seq
+            rh.setCommand(v_w(0,0),v_w(1,0));
+            loop++;
         }
         rh.disconnection();
     } else {

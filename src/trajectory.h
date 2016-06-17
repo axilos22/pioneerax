@@ -1,6 +1,6 @@
 /* @author Axel JEANNE
- * 
- */ 
+ *
+ */
 #ifndef TRAJECTORY_H
 #define TRAJECTORY_H
 //CPP
@@ -18,7 +18,7 @@ class Trajectory
 public:
     //parameter
     double m_gain, // the error gain
-     m_d; //the small distance between the axle and the controlled point
+    m_d; //the small distance between the axle and the controlled point
     double m_radius, m_angularSpeed, m_time_s, m_time_ms;
     Eigen::Vector3d m_pose, m_initialPose;
     Eigen::Vector2d m_desiredPosition, m_errorPosition, m_desiredPositionDot;
