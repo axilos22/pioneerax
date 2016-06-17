@@ -11,6 +11,7 @@ Robothandler::Robothandler(int argc, char **argv)
     m_robotConnector= new ArRobotConnector(m_parser,m_robot);
     m_laserConnector=new ArLaserConnector(m_parser,m_robot,m_robotConnector);
     m_time = new ArTime();
+    m_keyHandler = new ArKeyHandler();
 }
 
 int Robothandler::connection()
@@ -68,8 +69,23 @@ std::vector<double> Robothandler::getPose() {
     outPose.push_back(m_robot->getTh()); //getting heading in degree
     //~ outPose.push_back(m_robot->getThRad());
     m_robot->unlock();
-    //~ ArLog::log(ArLog::Normal,"Ax-example: pose=(%.2f,%.2f,%.2f)",m_robot->getX(),m_robot->getY(),m_robot->getTh());
+    ArLog::log(ArLog::Verbose,"Ax-example: pose=(%.2f,%.2f,%.2f)",m_robot->getX(),m_robot->getY(),m_robot->getTh());
     return outPose;
+}
+
+Eigen::Vector2d Robothandler::getPositionEigen() {	
+	m_robot->lock();
+	Eigen::Vector2d position(m_robot->getX(),m_robot->getY());
+	m_robot->unlock();
+	return position;
+}
+
+Eigen::Vector3d Robothandler::getPoseEigen() {
+	m_robot->lock();
+	//heading is given between [-180,180]
+	Eigen::Vector3d pose(m_robot->getX(),m_robot->getY(),getTh());
+	m_robot->unlock();
+	return pose;
 }
 
 void Robothandler::activateSonar()
@@ -89,10 +105,9 @@ void Robothandler::activateLaser()
 
 void Robothandler::makeKeyHandler()
 {
-    //Make a key handler, so that escape will shut down the program
-    ArKeyHandler keyHandler;
-    Aria::setKeyHandler(&keyHandler);
-    m_robot->attachKeyHandler(&keyHandler);
+    //Make a key handler, so that escape will shut down the program    
+    Aria::setKeyHandler(m_keyHandler);
+    m_robot->attachKeyHandler(m_keyHandler);
     printf("You may press escape to exit\n");
 }
 
@@ -143,13 +158,15 @@ Robothandler::~Robothandler()
 void Robothandler::followSquare() {
     getPose();
     m_robot->enableMotors();
+    //sleep 3s to be rdy for commands
+    ArUtil::sleep(3000);
     for(int i=0;i<4;i++) {
-        //go forward 100mm/s for 3s
+        //go forward 500mm/s for 2s
         m_robot->lock();
         m_robot->setRotVel(0);
-        m_robot->setVel(300);
+        m_robot->setVel(500);
         m_robot->unlock();
-        ArUtil::sleep(3000);
+        ArUtil::sleep(2000);
 
         //stop
         m_robot->lock();
@@ -163,7 +180,6 @@ void Robothandler::followSquare() {
         m_robot->setVel(0);
         m_robot->unlock();
         ArUtil::sleep(3000);
-
         getPose();
     }
 
@@ -182,9 +198,9 @@ void Robothandler::resetTime() {
 }
 
 void Robothandler::setCommand(double v, double w) {
-    m_robot->lock();
-    m_robot->setRotVel(w);
+    m_robot->lock();    
     m_robot->setVel(v);
+    m_robot->setRotVel(w); //set in degree per second
     m_robot->unlock();
     ArUtil::sleep(400); //400ms sampling period
 }
