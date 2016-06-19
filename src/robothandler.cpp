@@ -1,5 +1,9 @@
 #include "robothandler.h"
-
+/**
+ * @brief Robothandler::Robothandler constructor, need the information from command line to execute properly.
+ * @param argc main input
+ * @param argv main input
+ */
 Robothandler::Robothandler(int argc, char **argv)
 {
     Aria::init();
@@ -13,7 +17,10 @@ Robothandler::Robothandler(int argc, char **argv)
     m_time = new ArTime();
     m_keyHandler = new ArKeyHandler();
 }
-
+/**
+ * @brief Robothandler::connection try to connect with the robt.
+ * @return 1 if connection failed / 0 if successfull
+ */
 int Robothandler::connection()
 {		
     if(!m_robotConnector->connectRobot()) {
@@ -32,7 +39,10 @@ int Robothandler::connection()
     ArLog::log(ArLog::Normal, "Ax-Example@connection: Connected to robot.");
     return 0;
 }
-
+/**
+ * @brief Robothandler::disconnection end the robot thread and terminate connection with the robot.
+ * @return 1 failed / 0 successfull
+ */
 int Robothandler::disconnection() {
     ArLog::log(ArLog::Normal,"Ax-Example@disconnection Ending robot thread");
     m_robot->stopRunning();
@@ -40,7 +50,9 @@ int Robothandler::disconnection() {
     m_robot->waitForRunExit();
     return 0;
 }
-
+/**
+ * @brief Robothandler::getInitialData print some intial data of the robot.
+ */
 void Robothandler::getInitialData(){
     m_robot->enableMotors();
     //background robot processing cycle
@@ -60,7 +72,10 @@ void Robothandler::getInitialData(){
     //wait for the thread to stop
     //m_robot->waitForRunExit();
 }
-
+/**
+ * @brief Robothandler::getPose print and give back the pose of the robot.
+ * @return the pose of the robot.
+ */
 std::vector<double> Robothandler::getPose() {	
     m_robot->lock();
     std::vector<double> outPose;
@@ -72,14 +87,20 @@ std::vector<double> Robothandler::getPose() {
     ArLog::log(ArLog::Verbose,"Ax-example: pose=(%.2f,%.2f,%.2f)",m_robot->getX(),m_robot->getY(),m_robot->getTh());
     return outPose;
 }
-
+/**
+ * @brief Robothandler::getPositionEigen give the position of the robot with Eigen::Vector2d format
+ * @return position of the robot.
+ */
 Eigen::Vector2d Robothandler::getPositionEigen() {	
     m_robot->lock();
     Eigen::Vector2d position(m_robot->getX(),m_robot->getY());
     m_robot->unlock();
     return position;
 }
-
+/**
+ * @brief Robothandler::getPoseEigen return the pose of the robot with an Eigen::Vector3d format
+ * @return pose of the vector
+ */
 Eigen::Vector3d Robothandler::getPoseEigen() {
     m_robot->lock();
     //heading is given between [-180,180]
@@ -87,14 +108,17 @@ Eigen::Vector3d Robothandler::getPoseEigen() {
     m_robot->unlock();
     return pose;
 }
-
+/**
+ * @brief Robothandler::activateSonar try to activate sonar (if any)
+ */
 void Robothandler::activateSonar()
 {
-    //declare sonar
     m_robot->addRangeDevice(m_sonar);
     m_robot->runAsync(true);
 }
-
+/**
+ * @brief Robothandler::activateLaser try to activate laser (if any)
+ */
 void Robothandler::activateLaser()
 {
     //try to connect to laser. if fail, warn & continue
@@ -102,7 +126,9 @@ void Robothandler::activateLaser()
         ArLog::log(ArLog::Normal, "Warning: unable to connect lasers. Using only sonar");
     }
 }
-
+/**
+ * @brief Robothandler::makeKeyHandler makes a key handler (ESC by default) to cleanly exit the program
+ */
 void Robothandler::makeKeyHandler()
 {
     //Make a key handler, so that escape will shut down the program
@@ -110,7 +136,10 @@ void Robothandler::makeKeyHandler()
     m_robot->attachKeyHandler(m_keyHandler);
     printf("You may press escape to exit\n");
 }
-
+/**
+ * @brief Robothandler::wander stack some action to make the robot wander around while avoiding obstacles
+ * @return
+ */
 int Robothandler::wander()
 {
     ArLog::log(ArLog::Normal,"Ax-example: Starting wondering sequence...");
@@ -143,7 +172,9 @@ int Robothandler::wander()
     m_robot->waitForRunExit();
     return 0;
 }
-
+/**
+ * @brief Robothandler::~Robothandler destructor
+ */
 Robothandler::~Robothandler()
 {	
     //remove allocation of all elements
@@ -154,7 +185,9 @@ Robothandler::~Robothandler()
     delete m_robotConnector;
     delete m_laserConnector;
 }
-
+/**
+ * @brief Robothandler::followSquare make the robot follow a square trajectory
+ */
 void Robothandler::followSquare() {
     getPose();
     m_robot->enableMotors();
@@ -186,17 +219,26 @@ void Robothandler::followSquare() {
     m_robot->stopRunning();
     m_robot->waitForRunExit();
 }
-
+/**
+ * @brief Robothandler::getTime return the current time (s) of the robot
+ * @return time (in s)
+ */
 const ArTime* Robothandler::getTime() {
     return m_time;
 }
-
+/**
+ * @brief Robothandler::resetTime reset the internal robot timer for convinience
+ */
 void Robothandler::resetTime() {
     //~ m_time->setSec(0);
     //~ m_time->setMSec(0);
     m_time->setToNow();
 }
-
+/**
+ * @brief Robothandler::setCommand send command to the robot
+ * @param v linear speed
+ * @param w angular speed
+ */
 void Robothandler::setCommand(double v, double w) {
     m_robot->lock();
     m_robot->setVel(v);
@@ -204,7 +246,9 @@ void Robothandler::setCommand(double v, double w) {
     m_robot->unlock();
     ArUtil::sleep(400); //400ms sampling period
 }
-
+/**
+ * @brief Robothandler::prepareToMove switch on the robot engines and launch the robot thread.
+ */
 void Robothandler::prepareToMove() {
     m_robot->enableMotors();
     //background robot processing cycle

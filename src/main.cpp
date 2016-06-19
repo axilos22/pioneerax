@@ -1,6 +1,7 @@
 /**
  * @author Axel JEANNE for ECN
- * @date 15/06/2016
+ * @date 17/06/2016
+ * @version 0.07
  * @note To launch program :
  * 		sudo chmod 777 -R /dev/ttyUSB0 (the name of the USB port attached to the robot (use dmesg)
  * 		./pioneerax -robotPort /dev/ttyUSB0
@@ -15,6 +16,10 @@
 
 #define SUCCESSFUL_EXE_CODE 0
 #define CONNECTION_FAILED_CODE 2
+
+const double circleRadius = 700,//mm
+angularSpeed = .01,//rad/s
+errorGain = 0;  //gain applied to error
 /**
  * @brief makeRobotWander make the robot wander (normally)
  * @param rh the robot handler
@@ -45,10 +50,16 @@ void squareTrajectory(Robothandler &rh) {
         ArLog::log(ArLog::Normal, "Ax-Example@main: Unable to connect to robot. Abort");
     }
 }
-
+/**
+ * @brief main main of the program. Intenally it use a Robothandler and a Trajectory. Both classes have linkages
+ * to comunicate.
+ * @param argc
+ * @param argv
+ * @return return code (check defines).
+ */
 int main(int argc, char** argv) {    		
     Robothandler rh(argc,argv);
-    Trajectory tr(700,.01,0); //radius (mm) ,angular speed (rad/s) and error gain
+    Trajectory tr(circleRadius,angularSpeed,errorGain); //radius (mm) ,angular speed (rad/s) and error gain
     int retCode = rh.connection();
     if(!retCode) { //if we connected
         rh.makeKeyHandler();

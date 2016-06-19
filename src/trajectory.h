@@ -15,10 +15,10 @@
 
 class Trajectory
 {
-    enum Type {circle,square,other};
+    enum Type {circle,square,triangle,other};
 public:
     //parameter
-    double m_gain, // the error gain
+    double m_errorGain, // the error gain
     m_d; //the small distance between the axle and the controlled point
     double m_radius, m_angularSpeed, m_time_s, m_time_ms;
     Eigen::Vector3d m_pose, m_initialPose;
