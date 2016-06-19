@@ -8,6 +8,10 @@
 //EIGEN
 #include <Eigen/Dense>
 
+#ifndef VERBOSE
+    #define VERBOSE = 0
+#endif
+
 class Robothandler
 {
 public:

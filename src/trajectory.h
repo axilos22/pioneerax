@@ -13,6 +13,10 @@
 //~ #include <Eigen/Eigen>
 #include <Eigen/Dense>
 
+#ifndef VERBOSE
+    #define VERBOSE = 0
+#endif
+
 class Trajectory
 {
     enum Type {circle,square,triangle,other};

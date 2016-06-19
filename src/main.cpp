@@ -1,11 +1,16 @@
 /**
  * @author Axel JEANNE for ECN
- * @date 17/06/2016
+ * @date 19/06/2016
  * @version 0.07
  * @note To launch program :
  * 		sudo chmod 777 -R /dev/ttyUSB0 (the name of the USB port attached to the robot (use dmesg)
  * 		./pioneerax -robotPort /dev/ttyUSB0
  */
+//define
+#define SUCCESSFUL_EXE_CODE 0
+#define CONNECTION_FAILED_CODE 2
+#define VERBOSE 1
+
 //CPP
 #include <iostream>
 #include <istream>
@@ -13,9 +18,6 @@
 //local
 #include "robothandler.h"
 #include "trajectory.h"
-
-#define SUCCESSFUL_EXE_CODE 0
-#define CONNECTION_FAILED_CODE 2
 
 const double circleRadius = 700,//mm
 angularSpeed = .01,//rad/s

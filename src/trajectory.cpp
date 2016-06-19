@@ -53,9 +53,11 @@ void Trajectory::setInitialPose(const std::vector<double> pos)
 /**
  * @brief Trajectory::computeDesired compute the desired position and its derivative.
  */
-void Trajectory::computeDesired() {   
+void Trajectory::computeDesired() {
+    //compute position
     m_desiredPosition(0,0)= m_radius*cos(m_angularSpeed*m_time_s);
     m_desiredPosition(1,0)= m_radius*sin(m_angularSpeed*m_time_s);
+    //compute derivative
     m_desiredPositionDot(0,0)=-m_angularSpeed*m_radius*sin(m_angularSpeed*m_time_s);
     m_desiredPositionDot(1,0)=m_angularSpeed*m_radius*cos(m_angularSpeed*m_time_s);
 }
@@ -84,6 +86,7 @@ void Trajectory::updateRobotPose(const std::vector<double> pos) {
  */
 void Trajectory::updateRobotPose(const Eigen::Vector3d pose) {
     m_pose = pose;
+    //put the orientation as rad
     m_pose(2,0)= degree2rad(pose(2,0));
 }
 /**
@@ -149,7 +152,6 @@ Eigen::Vector2d Trajectory::computeCommands() {
     std::cout << "invK =" << invK << std::endl;
     std::cout << "W =" << m_W << std::endl;
     Eigen::Vector2d v_w = invK*m_W;
-    v_w(1,0) = v_w(1,0)*180/M_PI; // convert w in degree/sec
     return v_w;
 
 }
@@ -168,14 +170,14 @@ Eigen::Vector2d Trajectory::trajectorySequence(const double time_s, Eigen::Vecto
     computeDesired();
     std::cout <<"@trajSeq Desired Pos vector \n "<< getDesiredPosition() << std::endl;
     updateRobotPose(pose);
-    //~ addDPart(); // add the part used to control the point P of the robot.
+    addDPart(); // add the part used to control the point P of the robot.
     std::cout <<"@trajSeq Updated robot pose \n "<< getRobotPose() << std::endl;
     computeError();
     std::cout <<"@trajSeq  ERROR vector (after gain) \n "<< getErrorPosition() << std::endl;
     addDesiredDerivatives(); //take the desired derivatives for control
     Eigen::Vector2d v_w = computeCommands();
     std::cout <<"@trajSeq CMD= \n "<< v_w << std::endl;
-    //convert lateral speed to rad/s
+    //convert lateral speed to deg/s
     v_w(1,0) = rad2degree(v_w(1,0));
     return v_w;
 }

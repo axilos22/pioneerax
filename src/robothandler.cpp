@@ -114,7 +114,6 @@ Eigen::Vector3d Robothandler::getPoseEigen() {
 void Robothandler::activateSonar()
 {
     m_robot->addRangeDevice(m_sonar);
-    m_robot->runAsync(true);
 }
 /**
  * @brief Robothandler::activateLaser try to activate laser (if any)
