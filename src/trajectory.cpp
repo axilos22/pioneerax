@@ -14,8 +14,8 @@ Trajectory::Trajectory(double radius, double w, double errGain)
     m_d = 50; //50mm
     std::cout << "New trajectory generated. type=circular R=" << m_radius
               << " W=" << m_angularSpeed
-              << "Kerr="<< m_errorGain
-              << "d=" << m_d << std::endl;
+              << " Kerr="<< m_errorGain
+              << " d=" << m_d << std::endl;
 }
 
 Trajectory::~Trajectory(){    
@@ -67,19 +67,12 @@ void Trajectory::computeDesired() {
  */
 void Trajectory::updateRobotPose(const std::vector<double> pos) {
     if(pos.size() != 3) {
-        std::cout << "WARNING: Unexpected size of the pose. " << std::endl;
+        std::cout << "Traj@updateRobotPose WARNING: Unexpected size of the pose. " << std::endl;
     }
     m_pose(0,0) = pos.at(0);
     m_pose(1,0)= pos.at(1);
     m_pose(2,0)= degree2rad(pos.at(2));
 }
-
-//~ void Trajectory::updateRobotPose(const Eigen::Vector2d position) {
-//~ m_pose(0,0)=position(0,0);
-//~ m_pose(1,0)=position(1,0);
-//~ //no information about orientation here.
-//~ m_pose(2,0)=0;
-//~ }
 /**
  * @brief Trajectory::updateRobotPose for the error computation
  * @param pose
@@ -150,16 +143,15 @@ Eigen::Vector2d Trajectory::computeCommands() {
     //~ Eigen::Vector2d v_w = invK*m_errorPosition;
     //~ v_w = invK*m_desiredPositionDot;
     std::cout << "invK =" << invK << std::endl;
-    std::cout << "W =" << m_W << std::endl;
-    Eigen::Vector2d v_w = invK*m_W;
+    std::cout << "U =" << m_u << std::endl;
+    Eigen::Vector2d v_w = invK*m_u;
     return v_w;
-
 }
 /**
  * @brief Trajectory::trajectorySequence executes the full sequence to compute commands
  * @param time_s the current time for the robot (s)
  * @param pos the current position of the robot (mm)
- * @return
+ * @return commands for the robot
  */
 Eigen::Vector2d Trajectory::trajectorySequence(const double time_s, Eigen::Vector3d pose)
 {
@@ -174,7 +166,7 @@ Eigen::Vector2d Trajectory::trajectorySequence(const double time_s, Eigen::Vecto
     std::cout <<"@trajSeq Updated robot pose \n "<< getRobotPose() << std::endl;
     computeError();
     std::cout <<"@trajSeq  ERROR vector (after gain) \n "<< getErrorPosition() << std::endl;
-    addDesiredDerivatives(); //take the desired derivatives for control
+    m_u = m_errorPosition + m_desiredPositionDot;//add the desired derivatives for control
     Eigen::Vector2d v_w = computeCommands();
     std::cout <<"@trajSeq CMD= \n "<< v_w << std::endl;
     //convert lateral speed to deg/s
@@ -187,13 +179,6 @@ Eigen::Vector2d Trajectory::trajectorySequence(const double time_s, Eigen::Vecto
 void Trajectory::addDPart() {
     m_pose(0,0)+=m_d*cos(m_pose(2,0)); // Hx = x + cos(th)
     m_pose(1,0)+=m_d*sin(m_pose(2,0)); // Hy = y + sin(th)
-}
-/**
- * @brief Trajectory::addDesiredDerivatives compute m_W which is the sum of
- * error postion and desired position derived.
- */
-void Trajectory::addDesiredDerivatives() {
-    m_W = m_errorPosition + m_desiredPositionDot;
 }
 /**
  * @brief Trajectory::rad2degree convert a values from rad to degree

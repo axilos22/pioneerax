@@ -10,6 +10,7 @@
 #define SUCCESSFUL_EXE_CODE 0
 #define CONNECTION_FAILED_CODE 2
 #define VERBOSE 1
+#define LOOP 50
 
 //CPP
 #include <iostream>
@@ -19,7 +20,7 @@
 #include "robothandler.h"
 #include "trajectory.h"
 
-const double circleRadius = 700,//mm
+const double circleRadius = 400,//mm
 angularSpeed = .01,//rad/s
 errorGain = 0;  //gain applied to error
 /**
@@ -71,7 +72,7 @@ int main(int argc, char** argv) {
         ArLog::log(ArLog::Normal,"Ax-example@main : Begin control in 3s");
         ArUtil::sleep(3000);
         rh.resetTime(); //reset time for the control algorithm
-        while(Aria::getRunning() && loop < 10) {
+        while(Aria::getRunning() && loop < LOOP) {
             std::cout << "############### @main " << "[" << loop << "] ###############" << std::endl;
             Eigen::Vector2d v_w = tr.trajectorySequence(rh.getTime()->secSince(),rh.getPoseEigen());
             rh.setCommand(v_w(0,0),v_w(1,0));
