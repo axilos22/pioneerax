@@ -1,4 +1,5 @@
-New trajectory generated. type=circular R=700 W=0.01Kerr=0d=50
+pioneer_project@Pioneer:~/Projet/Projet_Pioneer/pioneerax/build$ ./pioneerax -robotPort /dev/ttyUSB0
+New trajectory generated. type=circular R=400 W=0.01Kerr=0d=50
 Could not connect to simulator, connecting to robot through serial port /dev/ttyUSB0.
 Syncing 0
 Syncing 1
@@ -19,199 +20,952 @@ Ax-example@main : Begin control in 3s
 ############### @main [0] ###############
 robot time= 0s
 @trajSeq Desired Pos vector 
- 700
+ 400
   0
 @trajSeq Updated robot pose 
+ 50
  0
-0
-0
+ 0
 @trajSeq  ERROR vector (after gain) 
- 700
+ 350
   0
 invK =   1   -0
    0 0.02
-W =700
-  7
+U =350
+  4
 @trajSeq CMD= 
-     700
-8.02141
+  350
+0.08
 ############### @main [1] ###############
 robot time= 0s
 @trajSeq Desired Pos vector 
- 700
+ 400
   0
 @trajSeq Updated robot pose 
-     11
-     0
-0.0612
+  60.9916
+0.917948
+ 0.01836
 @trajSeq  ERROR vector (after gain) 
- 689
-  0
-invK =   0.998128 -0.00122324
-  0.0611618   0.0199626
-W =689
-  7
+   339.008
+-0.917948
+invK =    0.999831 -0.000367179
+    0.018359    0.0199966
+U =339.008
+3.08205
 @trajSeq CMD= 
- 687.702
-2422.48
+  338.95
+6.28548
 ############### @main [2] ###############
 robot time= 0s
 @trajSeq Desired Pos vector 
- 700
+ 400
   0
 @trajSeq Updated robot pose 
-      67
-     13
-0.39321
+ 117.644
+8.95285
+0.11934
 @trajSeq  ERROR vector (after gain) 
- 633
--13
-invK =   0.923684 -0.00766311
-   0.383155   0.0184737
-W =633
- -6
+  282.356
+-8.95285
+invK =   0.992887 -0.00238114
+   0.119057   0.0198577
+U = 282.356
+-4.95285
 @trajSeq CMD= 
- 584.738
-  13890
+ 280.359
+ 33.518
 ############### @main [3] ###############
 robot time= 1s
 @trajSeq Desired Pos vector 
- 699.965
-6.99988
+  399.98
+3.99993
 @trajSeq Updated robot pose 
-     145
-     79
-0.99756
+ 209.234
+55.3109
+0.48501
 @trajSeq  ERROR vector (after gain) 
-  554.965
--72.0001
-invK = 0.542354 -0.016803
-  0.84015 0.0108471
-W = 554.895
--65.0005
+  190.746
+-51.3109
+invK =    0.88467 -0.00932434
+   0.466217   0.0176934
+U = 190.706
+-47.3111
 @trajSeq CMD= 
- 302.042
-26670.6
+ 169.154
+88.0736
 ############### @main [4] ###############
 robot time= 1s
 @trajSeq Desired Pos vector 
- 699.965
-6.99988
+  399.98
+3.99993
 @trajSeq Updated robot pose 
-     175
-    203
-1.69371
+ 257.992
+144.904
+1.11537
 @trajSeq  ERROR vector (after gain) 
- 524.965
-   -196
-invK =  -0.122604  -0.0198491
-   0.992456 -0.00245209
-W =524.895
-   -189
+  141.988
+-140.904
+invK =  0.439845 -0.0179615
+  0.898074  0.0087969
+U = 141.948
+-136.904
 @trajSeq CMD= 
- -60.603
-29873.9
+  64.894
+126.275
 ############### @main [5] ###############
 robot time= 1s
 @trajSeq Desired Pos vector 
- 699.965
-6.99988
+  399.98
+3.99993
 @trajSeq Updated robot pose 
-     128
-    299
-2.38833
+  232.08
+203.558
+1.81152
 @trajSeq  ERROR vector (after gain) 
- 571.965
-   -292
-invK = -0.729461 -0.0136804
-  0.684022 -0.0145892
-W =571.895
-   -285
+    167.9
+-199.558
+invK =  -0.238405  -0.0194233
+   0.971166 -0.00476811
+U =  167.86
+-195.559
 @trajSeq CMD= 
- -413.276
- 22651.7
+ -36.2204
+ 163.953
 ############### @main [6] ###############
 robot time= 2s
 @trajSeq Desired Pos vector 
-  699.86
-13.9991
+  399.92
+7.99947
 @trajSeq Updated robot pose 
-      72
-    325
-3.08448
+  197.76
+197.677
+2.50614
 @trajSeq  ERROR vector (after gain) 
-   627.86
--311.001
-invK =   -0.99837 -0.00114163
-  0.0570816  -0.0199674
-W =  627.72
--304.002
+   202.16
+-189.678
+invK = -0.804803 -0.0118708
+  0.593542 -0.0160961
+U =  202.08
+-185.678
 @trajSeq CMD= 
- -626.349
- 2400.77
+ -160.431
+ 122.932
 ############### @main [7] ###############
 robot time= 2s
 @trajSeq Desired Pos vector 
-  699.86
-13.9991
+  399.92
+7.99947
 @trajSeq Updated robot pose 
-       56
-     323
--2.67239
+  213.107
+ 159.738
+-3.07631
 @trajSeq  ERROR vector (after gain) 
-   643.86
--309.001
-invK = -0.891927 0.00904359
- -0.452179 -0.0178385
-W =  643.72
--302.002
+  186.813
+-151.738
+invK =  -0.99787 0.00130482
+ -0.065241 -0.0199574
+U = 186.733
+-147.739
 @trajSeq CMD= 
- -576.882
--16368.8
+ -186.528
+-9.23418
 ############### @main [8] ###############
 robot time= 3s
 @trajSeq Desired Pos vector 
- 699.685
-20.9969
+  399.82
+11.9982
 @trajSeq Updated robot pose 
-       67
-     339
--2.00378
+  265.623
+ 153.463
+-2.58212
 @trajSeq  ERROR vector (after gain) 
-  632.685
--318.003
-invK =  -0.419577   0.0181544
-   -0.90772 -0.00839153
-W = 632.475
--311.006
+  134.197
+-141.465
+invK = -0.847533  0.0106149
+ -0.530743 -0.0169507
+U = 134.077
+-137.466
 @trajSeq CMD= 
- -271.018
--32744.6
+ -115.094
+-68.8301
 ############### @main [9] ###############
 robot time= 3s
 @trajSeq Desired Pos vector 
- 699.685
-20.9969
+  399.82
+11.9982
 @trajSeq Updated robot pose 
-       77
-     404
--1.57079
+  324.669
+ 182.131
+-2.14913
 @trajSeq  ERROR vector (after gain) 
-  622.685
--383.003
-invK =1.10196e-05        0.02
-         -1 2.20392e-07
-W = 622.475
--376.006
+  75.1513
+-170.133
+invK = -0.546625  0.0167475
+ -0.837377 -0.0109325
+U = 75.0313
+-166.135
 @trajSeq CMD= 
- -7.51327
--35665.2
+ -43.7964
+-61.0132
+############### @main [10] ###############
+robot time= 3s
+@trajSeq Desired Pos vector 
+  399.82
+11.9982
+@trajSeq Updated robot pose 
+  347.508
+ 208.392
+-1.99307
+@trajSeq  ERROR vector (after gain) 
+  52.3116
+-196.394
+invK =  -0.409831   0.0182432
+  -0.912161 -0.00819662
+U = 52.1916
+-192.396
+@trajSeq CMD= 
+ -24.8997
+-46.0302
+############### @main [11] ###############
+robot time= 4s
+@trajSeq Desired Pos vector 
+  399.68
+15.9957
+@trajSeq Updated robot pose 
+  347.487
+ 222.999
+-2.10629
+@trajSeq  ERROR vector (after gain) 
+  52.1931
+-207.003
+invK = -0.510262  0.0172004
+ -0.860019 -0.0102052
+U = 52.0332
+-203.007
+@trajSeq CMD= 
+ -30.0423
+-42.6778
+############### @main [12] ###############
+robot time= 4s
+@trajSeq Desired Pos vector 
+  399.68
+15.9957
+@trajSeq Updated robot pose 
+  339.866
+ 244.179
+-2.50256
+@trajSeq  ERROR vector (after gain) 
+  59.8136
+-228.183
+invK =  -0.80267  0.0119285
+ -0.596423 -0.0160534
+U = 59.6536
+-224.186
+@trajSeq CMD= 
+ -50.5564
+-31.9798
+############### @main [13] ###############
+robot time= 5s
+@trajSeq Desired Pos vector 
+   399.5
+19.9917
+@trajSeq Updated robot pose 
+ 346.008
+279.867
+3.12426
+@trajSeq  ERROR vector (after gain) 
+  53.4926
+-259.875
+invK =    -0.99985 -0.000346636
+   0.0173318    -0.019997
+U =53.2927
+-255.88
+@trajSeq CMD= 
+ -53.196
+6.04049
+############### @main [14] ###############
+robot time= 5s
+@trajSeq Desired Pos vector 
+   399.5
+19.9917
+@trajSeq Updated robot pose 
+ 375.034
+302.045
+2.49696
+@trajSeq  ERROR vector (after gain) 
+  24.4661
+-282.054
+invK = -0.799321 -0.0120181
+  0.600905 -0.0159864
+U = 24.2662
+-278.059
+@trajSeq CMD= 
+ -16.0548
+ 19.0268
+############### @main [15] ###############
+robot time= 5s
+@trajSeq Desired Pos vector 
+   399.5
+19.9917
+@trajSeq Updated robot pose 
+ 397.161
+305.186
+2.13741
+@trajSeq  ERROR vector (after gain) 
+    2.339
+-285.195
+invK = -0.536778 -0.0168745
+  0.843724 -0.0107356
+U =2.13909
+ -281.2
+@trajSeq CMD= 
+ 3.59688
+4.82363
+############### @main [16] ###############
+robot time= 6s
+@trajSeq Desired Pos vector 
+  399.28
+23.9856
+@trajSeq Updated robot pose 
+ 401.802
+306.293
+2.05326
+@trajSeq  ERROR vector (after gain) 
+ -2.52163
+-282.307
+invK =  -0.463963  -0.0177171
+   0.885855 -0.00927926
+U =-2.76149
+-278.314
+@trajSeq CMD= 
+  6.21215
+0.136274
+############### @main [17] ###############
+robot time= 6s
+@trajSeq Desired Pos vector 
+  399.28
+23.9856
+@trajSeq Updated robot pose 
+ 397.679
+306.512
+2.12517
+@trajSeq  ERROR vector (after gain) 
+  1.60076
+-282.526
+invK = -0.526411 -0.0170046
+   0.85023 -0.0105282
+U =  1.3609
+-278.533
+@trajSeq CMD= 
+ 4.01995
+4.08954
+############### @main [18] ###############
+robot time= 7s
+@trajSeq Desired Pos vector 
+  399.02
+27.9771
+@trajSeq Updated robot pose 
+ 394.755
+305.555
+2.19555
+@trajSeq  ERROR vector (after gain) 
+  4.26527
+-277.578
+invK = -0.584897 -0.0162221
+  0.811107 -0.0116979
+U =  3.9855
+-273.588
+@trajSeq CMD= 
+ 2.10707
+6.43309
+############### @main [19] ###############
+robot time= 7s
+@trajSeq Desired Pos vector 
+  399.02
+27.9771
+@trajSeq Updated robot pose 
+ 382.444
+294.244
+2.51685
+@trajSeq  ERROR vector (after gain) 
+  16.5761
+-266.267
+invK = -0.811114 -0.0116978
+  0.584889 -0.0162223
+U = 16.2963
+-262.277
+@trajSeq CMD= 
+ -10.1501
+ 13.7863
+############### @main [20] ###############
+robot time= 7s
+@trajSeq Desired Pos vector 
+  399.02
+27.9771
+@trajSeq Updated robot pose 
+  375.02
+266.402
+3.11355
+@trajSeq  ERROR vector (after gain) 
+  24.0007
+-238.425
+invK =  -0.999607 -0.00056078
+   0.028039  -0.0199921
+U =  23.721
+-234.435
+@trajSeq CMD= 
+ -23.5802
+ 5.35196
+############### @main [21] ###############
+robot time= 8s
+@trajSeq Desired Pos vector 
+ 398.721
+31.9659
+@trajSeq Updated robot pose 
+ 392.893
+236.845
+-2.4689
+@trajSeq  ERROR vector (after gain) 
+  5.82787
+-204.879
+invK = -0.782144   0.012462
+ -0.623098 -0.0156429
+U = 5.50821
+-200.892
+@trajSeq CMD= 
+  -6.81172
+-0.289628
+############### @main [22] ###############
+robot time= 8s
+@trajSeq Desired Pos vector 
+ 398.721
+31.9659
+@trajSeq Updated robot pose 
+  421.699
+ 223.802
+-1.84007
+@trajSeq  ERROR vector (after gain) 
+  -22.978
+-191.836
+invK =  -0.266027   0.0192793
+  -0.963966 -0.00532054
+U =-23.2976
+-187.849
+@trajSeq CMD= 
+  2.5762
+23.4576
+############### @main [23] ###############
+robot time= 8s
+@trajSeq Desired Pos vector 
+ 398.721
+31.9659
+@trajSeq Updated robot pose 
+  446.226
+ 223.277
+-1.34435
+@trajSeq  ERROR vector (after gain) 
+ -47.5053
+-191.311
+invK =  0.224521  0.0194894
+ -0.974469 0.00449041
+U = -47.825
+-187.323
+@trajSeq CMD= 
+ -14.3885
+ 45.7628
+############### @main [24] ###############
+robot time= 9s
+@trajSeq Desired Pos vector 
+ 398.381
+35.9514
+@trajSeq Updated robot pose 
+   472.439
+  243.267
+-0.661965
+@trajSeq  ERROR vector (after gain) 
+ -74.0582
+-207.315
+invK = 0.788786 0.0122934
+-0.614668 0.0157757
+U =-74.4177
+-203.331
+@trajSeq CMD= 
+ -61.1993
+ 42.5345
+############### @main [25] ###############
+robot time= 9s
+@trajSeq Desired Pos vector 
+ 398.381
+35.9514
+@trajSeq Updated robot pose 
+ 468.936
+279.523
+0.05049
+@trajSeq  ERROR vector (after gain) 
+ -70.5552
+-243.572
+invK =   0.998726 -0.00100937
+  0.0504686   0.0199745
+U =-70.9147
+-239.588
+@trajSeq CMD= 
+ -70.5825
+-8.36462
+############### @main [26] ###############
+robot time= 10s
+@trajSeq Desired Pos vector 
+ 398.002
+39.9334
+@trajSeq Updated robot pose 
+   432.9
+298.413
+0.67932
+@trajSeq  ERROR vector (after gain) 
+ -34.8983
+ -258.48
+invK =     0.778 -0.0125653
+  0.628264    0.01556
+U =-35.2977
+  -254.5
+@trajSeq CMD= 
+ -24.2637
+-26.1363
+############### @main [27] ###############
+robot time= 10s
+@trajSeq Desired Pos vector 
+ 398.002
+39.9334
+@trajSeq Updated robot pose 
+ 407.162
+296.208
+1.04346
+@trajSeq  ERROR vector (after gain) 
+    -9.16
+-256.274
+invK = 0.503233 -0.017283
+ 0.864151 0.0100647
+U =-9.55933
+-252.294
+@trajSeq CMD= 
+ -0.450172
+    -10.8
+############### @main [28] ###############
+robot time= 10s
+@trajSeq Desired Pos vector 
+ 398.002
+39.9334
+@trajSeq Updated robot pose 
+ 401.303
+295.235
+1.13067
+@trajSeq  ERROR vector (after gain) 
+ -3.30102
+-255.302
+invK =  0.426054  -0.018094
+  0.904698 0.00852108
+U =-3.70036
+-251.322
+@trajSeq CMD= 
+  2.97085
+-5.48923
+############### @main [29] ###############
+robot time= 11s
+@trajSeq Desired Pos vector 
+ 397.582
+43.9113
+@trajSeq Updated robot pose 
+ 406.147
+292.619
+1.02051
+@trajSeq  ERROR vector (after gain) 
+ -8.56413
+-248.707
+invK =  0.522931 -0.0170475
+  0.852375  0.0104586
+U =-9.00324
+-244.732
+@trajSeq CMD= 
+ -0.536015
+ -10.2337
+############### @main [30] ###############
+robot time= 11s
+@trajSeq Desired Pos vector 
+ 397.582
+43.9113
+@trajSeq Updated robot pose 
+  420.57
+279.224
+0.62424
+@trajSeq  ERROR vector (after gain) 
+ -22.9879
+-235.313
+invK =  0.811408 -0.0116896
+  0.584481  0.0162282
+U =-23.4271
+-231.337
+@trajSeq CMD= 
+ -16.3046
+-17.4468
+############### @main [31] ###############
+robot time= 12s
+@trajSeq Desired Pos vector 
+ 397.123
+47.8849
+@trajSeq Updated robot pose 
+    425.952
+   246.808
+-0.0438453
+@trajSeq  ERROR vector (after gain) 
+ -28.8285
+-198.924
+invK =   0.999039 0.000876625
+ -0.0438313   0.0199808
+U =-29.3073
+-194.952
+@trajSeq CMD= 
+ -29.4501
+-2.61072
+############### @main [32] ###############
+robot time= 12s
+@trajSeq Desired Pos vector 
+ 397.123
+47.8849
+@trajSeq Updated robot pose 
+   404.975
+  219.342
+-0.738465
+@trajSeq  ERROR vector (after gain) 
+ -7.85167
+-171.457
+invK = 0.739503 0.0134631
+-0.673154 0.0147901
+U =-8.33052
+-167.486
+@trajSeq CMD= 
+ -8.41532
+ 3.13059
+############### @main [33] ###############
+robot time= 12s
+@trajSeq Desired Pos vector 
+ 397.123
+47.8849
+@trajSeq Updated robot pose 
+   374.18
+ 209.047
+-1.36577
+@trajSeq  ERROR vector (after gain) 
+  22.9436
+-161.162
+invK =  0.203598  0.0195811
+ -0.979055 0.00407195
+U = 22.4647
+-157.191
+@trajSeq CMD= 
+  1.49579
+-22.6343
+############### @main [34] ###############
+robot time= 13s
+@trajSeq Desired Pos vector 
+ 396.625
+51.8537
+@trajSeq Updated robot pose 
+  349.596
+  211.12
+-1.86302
+@trajSeq  ERROR vector (after gain) 
+  47.0286
+-159.266
+invK =  -0.288078   0.0191521
+  -0.957607 -0.00576156
+U =46.5101
+ -155.3
+@trajSeq CMD= 
+ -16.3729
+-43.6436
+############### @main [35] ###############
+robot time= 13s
+@trajSeq Desired Pos vector 
+ 396.625
+51.8537
+@trajSeq Updated robot pose 
+  325.583
+ 233.988
+-2.54693
+@trajSeq  ERROR vector (after gain) 
+  71.0415
+-182.135
+invK = -0.828335  0.0112047
+ -0.560233 -0.0165667
+U =  70.523
+-178.168
+@trajSeq CMD= 
+  -60.413
+-36.5576
+############### @main [36] ###############
+robot time= 14s
+@trajSeq Desired Pos vector 
+ 396.086
+55.8172
+@trajSeq Updated robot pose 
+ 331.273
+269.218
+3.03705
+@trajSeq  ERROR vector (after gain) 
+ 64.8134
+ -213.4
+invK =   -0.99454 -0.00208705
+   0.104352  -0.0198908
+U =64.2552
+-209.44
+@trajSeq CMD= 
+ -63.4673
+ 10.8711
+############### @main [37] ###############
+robot time= 14s
+@trajSeq Desired Pos vector 
+ 396.086
+55.8172
+@trajSeq Updated robot pose 
+ 365.803
+287.412
+2.40975
+@trajSeq  ERROR vector (after gain) 
+  30.2836
+-231.595
+invK = -0.743944 -0.0133648
+  0.668242 -0.0148789
+U = 29.7254
+-227.634
+@trajSeq CMD= 
+ -19.0718
+ 23.2507
+############### @main [38] ###############
+robot time= 14s
+@trajSeq Desired Pos vector 
+ 396.086
+55.8172
+@trajSeq Updated robot pose 
+ 390.937
+286.364
+ 2.0502
+@trajSeq  ERROR vector (after gain) 
+  5.14891
+-230.546
+invK =  -0.46125 -0.0177454
+   0.88727  -0.009225
+U = 4.59073
+-226.585
+@trajSeq CMD= 
+ 1.90337
+6.16347
+############### @main [39] ###############
+robot time= 15s
+@trajSeq Desired Pos vector 
+ 395.508
+59.7753
+@trajSeq Updated robot pose 
+  395.96
+285.233
+1.96146
+@trajSeq  ERROR vector (after gain) 
+ -0.45146
+-225.458
+invK =  -0.380802  -0.0184931
+   0.924657 -0.00761604
+U =-1.04921
+-221.502
+@trajSeq CMD= 
+  4.49582
+0.716811
+############### @main [40] ###############
+robot time= 15s
+@trajSeq Desired Pos vector 
+ 395.508
+59.7753
+@trajSeq Updated robot pose 
+ 389.725
+283.712
+2.07774
+@trajSeq  ERROR vector (after gain) 
+  5.78381
+-223.936
+invK =  -0.485508  -0.0174846
+   0.874232 -0.00971015
+U = 5.18606
+-219.981
+@trajSeq CMD= 
+ 1.32843
+6.66987
+############### @main [41] ###############
+robot time= 16s
+@trajSeq Desired Pos vector 
+ 394.891
+63.7273
+@trajSeq Updated robot pose 
+ 376.196
+273.724
+2.42811
+@trajSeq  ERROR vector (after gain) 
+  18.6953
+-209.996
+invK = -0.756087 -0.0130894
+  0.654471 -0.0151217
+U =  18.058
+-206.047
+@trajSeq CMD= 
+ -10.9564
+ 14.9342
+############### @main [42] ###############
+robot time= 16s
+@trajSeq Desired Pos vector 
+ 394.891
+63.7273
+@trajSeq Updated robot pose 
+ 366.265
+245.142
+3.03858
+@trajSeq  ERROR vector (after gain) 
+  28.6259
+-181.414
+invK =  -0.994699 -0.00205661
+   0.102831   -0.019894
+U = 27.9886
+-177.465
+@trajSeq CMD= 
+ -27.4752
+ 6.40857
+############### @main [43] ###############
+robot time= 16s
+@trajSeq Desired Pos vector 
+ 394.891
+63.7273
+@trajSeq Updated robot pose 
+  382.669
+ 214.862
+-2.54387
+@trajSeq  ERROR vector (after gain) 
+  12.2217
+-151.134
+invK = -0.826617  0.0112553
+ -0.562765 -0.0165323
+U = 11.5845
+-147.186
+@trajSeq CMD= 
+ -11.2325
+-4.08602
+############### @main [44] ###############
+robot time= 17s
+@trajSeq Desired Pos vector 
+ 394.234
+67.6729
+@trajSeq Updated robot pose 
+  411.126
+ 200.933
+-1.91504
+@trajSeq  ERROR vector (after gain) 
+ -16.8921
+ -133.26
+invK =   -0.33748   0.0188267
+  -0.941333 -0.00674961
+U =-17.5688
+-129.318
+@trajSeq CMD= 
+  3.4945
+17.4109
+############### @main [45] ###############
+robot time= 17s
+@trajSeq Desired Pos vector 
+ 394.234
+67.6729
+@trajSeq Updated robot pose 
+  435.545
+ 198.573
+-1.41932
+@trajSeq  ERROR vector (after gain) 
+ -41.3112
+  -130.9
+invK =  0.150902   0.019771
+ -0.988549 0.00301805
+U =-41.9879
+-126.957
+@trajSeq CMD= 
+ -8.84615
+  41.124
+############### @main [46] ###############
+robot time= 17s
+@trajSeq Desired Pos vector 
+ 394.234
+67.6729
+@trajSeq Updated robot pose 
+   464.027
+  216.399
+-0.736935
+@trajSeq  ERROR vector (after gain) 
+ -69.7927
+-148.726
+invK = 0.740532 0.0134404
+-0.672022 0.0148106
+U =-70.4694
+-144.784
+@trajSeq CMD= 
+ -54.1308
+ 45.2126
+############### @main [47] ###############
+robot time= 18s
+@trajSeq Desired Pos vector 
+ 393.537
+71.6118
+@trajSeq Updated robot pose 
+    464.958
+   250.961
+-0.0407853
+@trajSeq  ERROR vector (after gain) 
+ -71.4209
+-179.349
+invK =  0.999168 0.00081548
+ -0.040774  0.0199834
+U =-72.1371
+-175.414
+@trajSeq CMD= 
+  -72.2201
+-0.564048
+############### @main [48] ###############
+robot time= 18s
+@trajSeq Desired Pos vector 
+ 393.537
+71.6118
+@trajSeq Updated robot pose 
+ 432.144
+273.411
+0.60435
+@trajSeq  ERROR vector (after gain) 
+ -38.6061
+  -201.8
+invK =  0.822872 -0.0113645
+  0.568227  0.0164574
+U =-39.3222
+-197.864
+@trajSeq CMD= 
+ -30.1085
+-25.6003
+############### @main [49] ###############
+robot time= 19s
+@trajSeq Desired Pos vector 
+ 392.802
+75.5436
+@trajSeq Updated robot pose 
+ 409.975
+ 272.25
+ 0.9027
+@trajSeq  ERROR vector (after gain) 
+ -17.1729
+-196.707
+invK = 0.619493   -0.0157
+ 0.785002 0.0123899
+U =-17.9284
+-192.779
+@trajSeq CMD= 
+ -8.07987
+-16.4623
 Ax-Example@disconnection Ending robot thread
 Disconnecting from robot.
-
-
-------------------
-(program exited with code: 0)
-Press return to continue
-
-
