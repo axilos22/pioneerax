@@ -1,7 +1,7 @@
 /**
  * @author Axel JEANNE for ECN
- * @date 19/06/2016
- * @version 0.07
+ * @date 20/06/2016
+ * @version 0.08
  * @note To launch program :
  * 		sudo chmod 777 -R /dev/ttyUSB0 (the name of the USB port attached to the robot (use dmesg)
  * 		./pioneerax -robotPort /dev/ttyUSB0
@@ -12,8 +12,10 @@
 #include <istream>
 #include <fstream>
 //local
-#include "robothandler.h"
-#include "trajectory.h"
+#include "../include/robothandler.h"
+#include "../include/trajectory.h"
+#include "../include/controller.h"
+#include "../include/circulartrajectory.h"
 //define
 #define SUCCESSFUL_EXE_CODE 0
 #define CONNECTION_FAILED_CODE 2
@@ -55,6 +57,26 @@ void squareTrajectory(Robothandler &rh) {
         ArLog::log(ArLog::Normal, "Ax-Example@main: Unable to connect to robot. Abort");
     }
 }
+void circularTrajectory(Robothandler& rh, double& radius, double& angularSpeed) {
+    CircularTrajectory ct(radius,angularSpeed);
+    Controller controller(.2,150);
+    rh.makeKeyHandler();
+    rh.prepareToMove();
+    controller.setInitialPose(0,0,0);
+    int loop =0;
+    ArLog::log(ArLog::Normal,"Ax-example@main : Begin control in 3s");
+    ArUtil::sleep(3000);
+    while(Aria::getRunning() && loop < LOOP) {
+        double time = rh.getTime()->mSecSince()/1000.0;
+        ct.computeDesired(time);
+        controller.updateRobotPose(rh.getPoseEigen());
+        controller.computeError(ct.desiredPosition());
+        Eigen::Vector2d v_w = controller.computeCommands();
+        rh.setCommand(v_w(0),v_w(1));
+        loop++;
+    }
+}
+
 /**
  * @brief main main of the program. Intenally it use a Robothandler and a Trajectory. Both classes have linkages
  * to comunicate.
@@ -76,14 +98,11 @@ int main(int argc, char** argv) {
         rh.prepareToMove();
         tr.setInitialPose(0,0,0);
         int loop = 0;
-        ArLog::log(ArLog::Normal,"Ax-example@main : Begin control in 3s");
-        ArUtil::sleep(3000);
+
         rh.resetTime(); //reset time for the control algorithm
-        auto clockBase = clock();
         while(Aria::getRunning() && loop < LOOP) {
             std::cout << "############### @main " << "[" << loop << "] ###############" << std::endl;
-            auto clockCur = clock();
-            double time = rh.getTime()->mSecSince()/1000.0; //double(clockCur - clockBase) / CLOCKS_PER_SEC; //
+            double time = rh.getTime()->mSecSince()/1000.0;
             Eigen::Vector2d v_w = tr.trajectorySequence(time,rh.getPoseEigen());
             Eigen::Vector2d desired = tr.getDesiredPosition();
 		    Eigen::Vector2d err = tr.getErrorPosition();

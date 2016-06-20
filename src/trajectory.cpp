@@ -1,4 +1,4 @@
-#include "trajectory.h"
+#include "../include/trajectory.h"
 /**
  * @brief Trajectory::Trajectory create a circular trajectory.
  * @param radius radius of the circle (mm)

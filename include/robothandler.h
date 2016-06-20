@@ -38,6 +38,8 @@ public:
     void resetTime();
     void setCommand(double v, double w);
     void prepareToMove();
+    double rad2degree(double radValue);
+    double degree2rad(double degValue);
 };
 
 #endif // ROBOTHANDLER_H
