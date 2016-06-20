@@ -1,4 +1,4 @@
-#include "robothandler.h"
+#include "../include/robothandler.h"
 /**
  * @brief Robothandler::Robothandler constructor, need the information from command line to execute properly.
  * @param argc main input
@@ -104,7 +104,7 @@ Eigen::Vector2d Robothandler::getPositionEigen() {
 Eigen::Vector3d Robothandler::getPoseEigen() {
     m_robot->lock();
     //heading is given between [-180,180]
-    Eigen::Vector3d pose(m_robot->getX(),m_robot->getY(),m_robot->getTh());
+    Eigen::Vector3d pose(m_robot->getX(),m_robot->getY(),degree2rad(m_robot->getTh()));
     m_robot->unlock();
     return pose;
 }
@@ -241,7 +241,7 @@ void Robothandler::resetTime() {
 void Robothandler::setCommand(double v, double w) {
     m_robot->lock();
     m_robot->setVel(v);
-    m_robot->setRotVel(w); //set in degree per second
+    m_robot->setRotVel(rad2degree(w)); //set in degree per second
     m_robot->unlock();
     ArUtil::sleep(200); //400ms sampling period
 }
@@ -252,4 +252,22 @@ void Robothandler::prepareToMove() {
     m_robot->enableMotors();
     //background robot processing cycle
     m_robot->runAsync(true);
+}
+/**
+ * @brief Robothandler::rad2degree convert a values from rad to degree
+ * @param radValue
+ * @return
+ */
+double Robothandler::rad2degree(double radValue)
+{
+    return (degValue*M_PI)/180.0;
+}
+/**
+ * @brief Robothandler::degree2rad convert a values from degree to rad
+ * @param degValue
+ * @return
+ */
+double Robothandler::degree2rad(double degValue)
+{
+    return (radValue*180.0)/M_PI;
 }
