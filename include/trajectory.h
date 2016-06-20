@@ -7,15 +7,12 @@
 #include <vector>
 #include <math.h>
 #include <iostream>
+
 //EIGEN
 //~ #include <eigen3/Eigen/Dense>
 //~ #include <eigen3/Eigen/Core>
 //~ #include <Eigen/Eigen>
 #include <Eigen/Dense>
-
-#ifndef VERBOSE
-    #define VERBOSE = 0
-#endif
 
 class Trajectory
 {

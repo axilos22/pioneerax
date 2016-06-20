@@ -11,7 +11,7 @@ Trajectory::Trajectory(double radius, double w, double errGain)
     m_radius = radius; //radius of the circle (mm)
     m_angularSpeed = w; //rotational speed along circle (rad/s)
     m_errorGain = errGain;
-    m_d = 50; //50mm
+    m_d = 150; //50mm
     std::cout << "New trajectory generated. type=circular R=" << m_radius
               << " W=" << m_angularSpeed
               << " Kerr="<< m_errorGain
@@ -94,7 +94,7 @@ void Trajectory::computeError() {
     //~ std::cout << "@computeErr desiredPos =" << m_desiredPosition << std::endl;
     m_errorPosition = m_desiredPosition-currentPosition;
     //~ std::cout << "@computeErr SUBBED" << std::endl;
-    m_errorPosition+=m_errorGain*m_errorPosition;
+    m_errorPosition = m_errorGain*m_errorPosition;
     //~ std::cout << "@computeErr MULED" << std::endl;
 }
 /**
@@ -136,14 +136,15 @@ void Trajectory::setGain(const double gain)
 Eigen::Vector2d Trajectory::computeCommands() {    
     double th = m_pose(2,0);
     //~ std::cout << "THETA =" << th << std::endl;
-    Eigen::Matrix2d invK(2,2);
-    invK << cos(th),(-1/m_d)*sin(th), sin(th), (1/m_d)*cos(th);
+    Eigen::Matrix2d K;
+    K << cos(th),-m_d*sin(th), sin(th), m_d*cos(th);
+    Eigen::Matrix2d invK = K.inverse();
     //~ std::cout <<"TRAJECTORY --- INV K mat" << invK << std::endl;
     //~ std::cout <<"TRAJECTORY --- ERR POS" << m_errorPosition << std::endl;
     //~ Eigen::Vector2d v_w = invK*m_errorPosition;
     //~ v_w = invK*m_desiredPositionDot;
-    std::cout << "invK =" << invK << std::endl;
-    std::cout << "U =" << m_u << std::endl;
+    //~ std::cout << "invK =" << invK << std::endl;
+    //~ std::cout << "U =" << m_u << std::endl;
     Eigen::Vector2d v_w = invK*m_u;
     return v_w;
 }
@@ -170,15 +171,15 @@ Eigen::Vector2d Trajectory::trajectorySequence(const double time_s, Eigen::Vecto
     Eigen::Vector2d v_w = computeCommands();
     std::cout <<"@trajSeq CMD= \n "<< v_w << std::endl;
     //convert lateral speed to deg/s
-    v_w(1,0) = rad2degree(v_w(1,0));
+    v_w(1) = rad2degree(v_w(1));   
     return v_w;
 }
 /**
  * @brief Trajectory::addDPart as we control the point P, distant from d to the axle, we add the d part to the pose
  */
 void Trajectory::addDPart() {
-    m_pose(0,0)+=m_d*cos(m_pose(2,0)); // Hx = x + cos(th)
-    m_pose(1,0)+=m_d*sin(m_pose(2,0)); // Hy = y + sin(th)
+    m_pose(0)+=(m_d + 130)*cos(m_pose(2)); // Hx = x + cos(th)
+    m_pose(1)+=(m_d + 130)*sin(m_pose(2)); // Hy = y + sin(th)
 }
 /**
  * @brief Trajectory::rad2degree convert a values from rad to degree

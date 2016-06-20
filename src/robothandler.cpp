@@ -243,7 +243,7 @@ void Robothandler::setCommand(double v, double w) {
     m_robot->setVel(v);
     m_robot->setRotVel(w); //set in degree per second
     m_robot->unlock();
-    ArUtil::sleep(400); //400ms sampling period
+    ArUtil::sleep(200); //400ms sampling period
 }
 /**
  * @brief Robothandler::prepareToMove switch on the robot engines and launch the robot thread.
