@@ -19,10 +19,10 @@
 #define CONNECTION_FAILED_CODE 2
 #define VERBOSE 1
 #define RECORD_CSV 1
-#define LOOP 1000
+#define LOOP 300
 
-const double circleRadius = 1500,//mm
-angularSpeed = .2,//rad/s
+const double circleRadius = 1000,//mm
+angularSpeed = .3,//rad/s
 errorGain = 0.2;  //gain applied to error
 const std::string trajFilePath = "../traj.csv";
 /**
@@ -89,12 +89,11 @@ int main(int argc, char** argv) {
 		    Eigen::Vector2d err = tr.getErrorPosition();
 		    Eigen::Vector3d robotPose = tr.getRobotPose();
 		    #if RECORD_CSV == 1
-			    csvFile.open("traj.csv");
-			    csvFile << loop << ";" << time << ";" << desired(0,0) << ";" << desired(1,0) 
-					<< ";" << robotPose(0,0) << ";" << robotPose(1,0) << ";" << err(0,0) 
-					<< ";" << err(1,0) << ";" << v_w(0,0) << ";" << v_w(1,0) << "\n";				
+			    csvFile << loop << ";" << time << ";" << desired(0) << ";" << desired(1) 
+					<< ";" << robotPose(0) << ";" << robotPose(1) << ";" << err(0) 
+					<< ";" << err(1) << ";" << v_w(0) << ";" << v_w(1) << "\n";				
 		    #endif
-            rh.setCommand(v_w(0,0),v_w(1,0));
+            rh.setCommand(v_w(0),v_w(1));
             loop++;
         }
         csvFile.close();
