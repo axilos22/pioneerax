@@ -1,7 +1,7 @@
 /**
  * @author Axel JEANNE for ECN
- * @date 20/06/2016
- * @version 0.08
+ * @date 21/06/2016
+ * @version 0.083
  * @note To launch program :
  * 		sudo chmod 777 -R /dev/ttyUSB0 (the name of the USB port attached to the robot (use dmesg)
  * 		./pioneerax -robotPort /dev/ttyUSB0
@@ -15,6 +15,9 @@
 #include "../include/robothandler.h"
 #include "../include/controller.h"
 #include "../include/circulartrajectory.h"
+#include "../include/camhandler.h"
+//lib
+#include "../lib/odometry/include/odometry.h"
 //define
 #define SUCCESSFUL_EXE_CODE 0
 #define CONNECTION_FAILED_CODE 2
@@ -108,6 +111,7 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
 int main(int argc, char** argv) {
 	recordFile.open(recordFilePath);
 	Robothandler rh(argc,argv);
+	CamHandler cam(0);
 	int retCode = rh.connection();
     if(!retCode) { //if we connected
 		doCircularTrajectory(rh,circleRadius,angularSpeed);
@@ -121,8 +125,3 @@ int main(int argc, char** argv) {
     return SUCCESSFUL_EXE_CODE;
     recordFile.close();
 }
-
-/* Test functions 
-* get some initial data after connection
-rh.getInitialData();
-*/

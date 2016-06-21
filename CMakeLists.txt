@@ -12,14 +12,25 @@ message(${ARIA_LIBRARY})
 include_directories(${EIGEN3_INCLUDE_DIR})
 find_package(Ceres REQUIRED)
 include_directories(${CERES_INCLUDE_DIRS})
+#ADDING OPEN CV
+find_package( OpenCV REQUIRED )
 #INCLUDING FILES
 include_directories(include)
-add_executable(pioneerax src/main.cpp src/robothandler.cpp src/circulartrajectory.cpp src/controller.cpp src/recorder)
+include_directories(lib/odometry/include)
+#ADDING SOURCE FILES
+add_executable(pioneerax src/main.cpp
+	src/robothandler
+	src/circulartrajectory
+	src/controller
+	src/camhandler
+	lib/odometry/src/epipolar
+	lib/odometry/src/odometry)
 #aria class handler
 target_link_libraries(pioneerax ${ARIA_LIBRARY})
 target_link_libraries(pioneerax ${CERES_LIBRARIES})
 target_link_libraries(pioneerax dl)
 target_link_libraries(pioneerax rt)
+target_link_libraries(pioneerax ${OpenCV_LIBRARIES})
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "-O2")        ## Optimize
