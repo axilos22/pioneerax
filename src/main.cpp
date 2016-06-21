@@ -13,7 +13,6 @@
 #include <fstream>
 //local
 #include "../include/robothandler.h"
-#include "../include/trajectory.h"
 #include "../include/controller.h"
 #include "../include/circulartrajectory.h"
 //define
@@ -25,7 +24,9 @@
 
 const double circleRadius = 1000,//mm
 angularSpeed = .3,//rad/s
-errorGain = 0.2;  //gain applied to error
+errorGain = 0.2,  //gain applied to error
+distance2center = 105, //distance to the controller point of the robot
+Kp = .2; //proportional gain
 const std::string trajFilePath = "../traj.csv";
 /**
  * @brief makeRobotWander make the robot wander (normally)
@@ -57,9 +58,9 @@ void squareTrajectory(Robothandler &rh) {
         ArLog::log(ArLog::Normal, "Ax-Example@main: Unable to connect to robot. Abort");
     }
 }
-void circularTrajectory(Robothandler& rh, double& radius, double& angularSpeed) {
+void circularTrajectory(Robothandler& rh,const double& radius,const double& angularSpeed) {
     CircularTrajectory ct(radius,angularSpeed);
-    Controller controller(.2,150);
+    Controller controller(Kp,distance2center);
     rh.makeKeyHandler();
     rh.prepareToMove();
     controller.setInitialPose(0,0,0);
@@ -71,7 +72,7 @@ void circularTrajectory(Robothandler& rh, double& radius, double& angularSpeed) 
         ct.computeDesired(time);
         controller.updateRobotPose(rh.getPoseEigen());
         controller.computeError(ct.desiredPosition());
-        Eigen::Vector2d v_w = controller.computeCommands();
+        Eigen::Vector2d v_w = controller.computeCommands(ct.desiredPositionDot());
         rh.setCommand(v_w(0),v_w(1));
         loop++;
     }
@@ -84,38 +85,41 @@ void circularTrajectory(Robothandler& rh, double& radius, double& angularSpeed) 
  * @param argv
  * @return return code (check defines).
  */
-int main(int argc, char** argv) {    		
-    Robothandler rh(argc,argv);
-    Trajectory tr(circleRadius,angularSpeed,errorGain); //radius (mm) ,angular speed (rad/s) and error gain
-    #if RECORD_CSV == 1
-		std::ofstream csvFile;
-		csvFile.open(trajFilePath);
-		csvFile << "loop;time;x_d;y_d;x;y;x_err;y_err;V;w\n"; 		
-    #endif
-    int retCode = rh.connection();
+int main(int argc, char** argv) {    		    
+    //~ Trajectory tr(circleRadius,angularSpeed,errorGain); //radius (mm) ,angular speed (rad/s) and error gain
+    //~ #if RECORD_CSV == 1
+		//~ std::ofstream csvFile;
+		//~ csvFile.open(trajFilePath);
+		//~ csvFile << "loop;time;x_d;y_d;x;y;x_err;y_err;V;w\n"; 		
+    //~ #endif
+    //~ int retCode = rh.connection();
+    //~ if(!retCode) { //if we connected
+        //~ rh.makeKeyHandler();
+        //~ rh.prepareToMove();
+        //~ tr.setInitialPose(0,0,0);
+        //~ int loop = 0;
+//~ 
+        //~ rh.resetTime(); //reset time for the control algorithm
+        //~ while(Aria::getRunning() && loop < LOOP) {
+            //~ std::cout << "############### @main " << "[" << loop << "] ###############" << std::endl;
+            //~ double time = rh.getTime()->mSecSince()/1000.0;
+            //~ Eigen::Vector2d v_w = tr.trajectorySequence(time,rh.getPoseEigen());
+            //~ Eigen::Vector2d desired = tr.getDesiredPosition();
+		    //~ Eigen::Vector2d err = tr.getErrorPosition();
+		    //~ Eigen::Vector3d robotPose = tr.getRobotPose();
+		    //~ #if RECORD_CSV == 1
+			    //~ csvFile << loop << ";" << time << ";" << desired(0) << ";" << desired(1) 
+					//~ << ";" << robotPose(0) << ";" << robotPose(1) << ";" << err(0) 
+					//~ << ";" << err(1) << ";" << v_w(0) << ";" << v_w(1) << "\n";				
+		    //~ #endif
+            //~ rh.setCommand(v_w(0),v_w(1));
+            //~ loop++;
+        //~ }
+        //~ csvFile.close();
+	Robothandler rh(argc,argv);
+	int retCode = rh.connection();
     if(!retCode) { //if we connected
-        rh.makeKeyHandler();
-        rh.prepareToMove();
-        tr.setInitialPose(0,0,0);
-        int loop = 0;
-
-        rh.resetTime(); //reset time for the control algorithm
-        while(Aria::getRunning() && loop < LOOP) {
-            std::cout << "############### @main " << "[" << loop << "] ###############" << std::endl;
-            double time = rh.getTime()->mSecSince()/1000.0;
-            Eigen::Vector2d v_w = tr.trajectorySequence(time,rh.getPoseEigen());
-            Eigen::Vector2d desired = tr.getDesiredPosition();
-		    Eigen::Vector2d err = tr.getErrorPosition();
-		    Eigen::Vector3d robotPose = tr.getRobotPose();
-		    #if RECORD_CSV == 1
-			    csvFile << loop << ";" << time << ";" << desired(0) << ";" << desired(1) 
-					<< ";" << robotPose(0) << ";" << robotPose(1) << ";" << err(0) 
-					<< ";" << err(1) << ";" << v_w(0) << ";" << v_w(1) << "\n";				
-		    #endif
-            rh.setCommand(v_w(0),v_w(1));
-            loop++;
-        }
-        csvFile.close();
+		circularTrajectory(rh,circleRadius,angularSpeed);
         rh.disconnection();
     } else {
         ArLog::log(ArLog::Normal, "Ax-Example@main: Unable to connect to robot. Abort");

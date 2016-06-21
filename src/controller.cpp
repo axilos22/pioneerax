@@ -20,7 +20,7 @@ void Controller::computeError(Eigen::Vector2d desiredPosition)
 
 void Controller::setInitialPose(double x0, double y0, double th0)
 {
-    m_initialPose(x0,y0,th0);
+    m_initialPose = Eigen::Vector3d(x0,y0,th0);
 }
 
 Eigen::Vector2d Controller::computeCommands(Eigen::Vector2d desiredPositionDot)

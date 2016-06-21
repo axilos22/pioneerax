@@ -260,7 +260,7 @@ void Robothandler::prepareToMove() {
  */
 double Robothandler::rad2degree(double radValue)
 {
-    return (degValue*M_PI)/180.0;
+    return (radValue*180.0)/M_PI;
 }
 /**
  * @brief Robothandler::degree2rad convert a values from degree to rad
@@ -269,5 +269,5 @@ double Robothandler::rad2degree(double radValue)
  */
 double Robothandler::degree2rad(double degValue)
 {
-    return (radValue*180.0)/M_PI;
+    return (degValue*M_PI)/180.0;
 }

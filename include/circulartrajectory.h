@@ -24,6 +24,6 @@ public:
     const Eigen::Vector2d desiredPosition();
     const Eigen::Vector2d desiredPositionDot();
     ~CircularTrajectory();
-}
+};
 
 #endif // ROBOTHANDLER_H

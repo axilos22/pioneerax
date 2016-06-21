@@ -37,7 +37,7 @@ public:
      * @brief computeCommands compute the commands to input to the robot
      * @return the command (v,w)
      */
-    Eigen::Vector2d computeCommands();
+    Eigen::Vector2d computeCommands(Eigen::Vector2d desiredPositionDot);
     void setInitialPose(double x0,double y0, double th0);
     ~Controller();
 };
