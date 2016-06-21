@@ -26,8 +26,9 @@ void Controller::setInitialPose(double x0, double y0, double th0)
 Eigen::Vector2d Controller::computeCommands(Eigen::Vector2d desiredPositionDot)
 {
     double th = m_robotPose(2);
-    Eigen::Vector2d u;
-    u = /*m_initialPose+*/ m_positionError + desiredPositionDot;
+    Eigen::Vector2d u, initialPosition;
+    initialPosition << m_initialPose(0), m_initialPose(1);
+    u = /*initialPosition*/ + m_positionError + desiredPositionDot; //initial position not working
     Eigen::Matrix2d K, invK;
     K << cos(th),-m_d*sin(th),
             sin(th), m_d*cos(th);

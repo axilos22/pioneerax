@@ -14,7 +14,7 @@ find_package(Ceres REQUIRED)
 include_directories(${CERES_INCLUDE_DIRS})
 #INCLUDING FILES
 include_directories(include)
-add_executable(pioneerax src/main.cpp src/robothandler.cpp src/trajectory.cpp src/circulartrajectory.cpp src/controller.cpp)
+add_executable(pioneerax src/main.cpp src/robothandler.cpp src/circulartrajectory.cpp src/controller.cpp src/recorder)
 #aria class handler
 target_link_libraries(pioneerax ${ARIA_LIBRARY})
 target_link_libraries(pioneerax ${CERES_LIBRARIES})
