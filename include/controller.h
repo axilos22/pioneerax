@@ -39,6 +39,7 @@ public:
      */
     Eigen::Vector2d computeCommands(Eigen::Vector2d desiredPositionDot);
     void setInitialPose(double x0,double y0, double th0);
+    Eigen::Vector2d getPositionError();
     ~Controller();
 };
 
