@@ -41,7 +41,7 @@ Transformation<double> MonocularOdometry::feedImage(const Mat & img2)
         double thresh = 50;
         for (auto match : matchVec)
         {
-            cout << match.distance << endl;
+            //~ cout << match.distance << endl;
             if (match.distance > thresh) continue;
             xVec1.push_back(cloud1[match.queryIdx]);
             xVec2.push_back(cloud2[match.trainIdx]);

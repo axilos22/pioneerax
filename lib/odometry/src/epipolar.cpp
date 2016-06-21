@@ -55,7 +55,7 @@ Matrix3d MotionEstimator::estimateEssential(const vector<Vector3d> & xVec1,
         AtA += A * A.transpose();
     }
     JacobiSVD<Matrix<double, 9, 9>> svd(AtA, ComputeFullV);
-    cout << "singular value : " << svd.singularValues()[8] << endl; 
+    //~ cout << "singular value : " << svd.singularValues()[8] << endl; 
     Matrix<double, 9, 1> H = svd.matrixV().col(8);
     Matrix3d E;
     E << H(0), H(1), H(2), H(3), H(4), H(5), H(6), H(7), H(8);
@@ -135,7 +135,7 @@ void MotionEstimator::ransac(const std::vector<Vector3d> & cloud1,
 //            if (inlierCount > 30) break;
         }
     }
-    cout << "inlierCount : " << inlierCount << endl;
+    //~ cout << "inlierCount : " << inlierCount << endl;
 }
 
 void MotionEstimator::extractMotion(const Matrix3d & E,

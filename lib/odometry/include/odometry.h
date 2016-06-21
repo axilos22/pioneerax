@@ -17,7 +17,6 @@ public:
     MonocularOdometry (vector<double> cameraParams) : 
     camera(cameraParams.data()), status(EMPTY) {}
     virtual ~MonocularOdometry () {}
-    
     Transformation<double> feedImage(const cv::Mat & img);
     
 private:

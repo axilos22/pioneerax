@@ -7,7 +7,7 @@ CamHandler::CamHandler(const int cameraId) {
     } else {
         std::cout << "fail opening the video capture device with id " << m_cameraId << std::endl;
     }
-//    assert(m_vc.isOpened());
+    assert(m_vc.isOpened());
 }
 
 CamHandler::~CamHandler()
@@ -198,8 +198,8 @@ bool CamHandler::isOpened()
 }
 
 cv::Mat CamHandler::read() {
-	cv::Mat frame;
-	bool retCode = m_vc.read(frame);
-	m_frame = frame;
-	return frame;
+	//~ cv::Mat frame;
+	bool retCode = m_vc.read(m_frame);
+	//~ m_frame = frame;
+	return m_frame;
 }
