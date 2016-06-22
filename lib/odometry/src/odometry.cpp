@@ -12,26 +12,26 @@ using cv::Mat;
 using cv::KeyPoint;
 using cv::DMatch;
 
-Transformation<double> MonocularOdometry::feedImage(const Mat & img2)
+Transformation<double> MonocularOdometry::feedImage(const Mat & i_img2)
 {
     cv::ORB orb;
-    Mat desc2;
-    vector<KeyPoint> keyPointVec2;
-    orb(img2, Mat(), keyPointVec2, desc2);
-    vector<Vector2d> pointVec2;
+    orb(i_img2, Mat(), keyPointVec2, desc2);
+    
     for (auto kpt : keyPointVec2)
     {
         pointVec2.emplace_back(kpt.pt.x, kpt.pt.y);
     }
-    vector<Vector3d> cloud2;
     camera.reconstructPointCloud(pointVec2, cloud2);
     Transformation<double> result;
     switch (status)
     {
-    case EMPTY:
-        
+    case EMPTY:        
         status = READY;
         result = Transformation<double>();
+        cloud1 = cloud2;
+	    desc1 = desc2;
+	    img2.copyTo(img1);
+	    keyPointVec1 = keyPointVec2;
         break;
     case READY:
         cv::BFMatcher bfm(cv::NORM_HAMMING, true);
@@ -46,10 +46,9 @@ Transformation<double> MonocularOdometry::feedImage(const Mat & img2)
             xVec1.push_back(cloud1[match.queryIdx]);
             xVec2.push_back(cloud2[match.trainIdx]);
         }
-       
+        /*Display the image matching*/
         //~ cv::Mat matchImg;
         //~ cv::drawMatches(img1, keyPointVec1, img2, keyPointVec2, matchVec, matchImg);
-        //~ 
         //~ imshow("matchImg", matchImg);
        
         vector<bool> mask;
@@ -59,19 +58,29 @@ Transformation<double> MonocularOdometry::feedImage(const Mat & img2)
         vector<Transformation<double>> xiVec2;
         
         motion.extractMotion(E, xiVec2);
-        if (xiVec2[0].rot().norm() < xiVec2[1].rot().norm()) result = xiVec2[0];
-        else result = xiVec2[1];
+        /*take the smallest norm among the transformations*/
+        if (xiVec2[0].rot().norm() < xiVec2[1].rot().norm())
+	        result = xiVec2[0];
+        else 
+	        result = xiVec2[1];
         break;
     }
     
     // refresh the odometry state;
-    cloud1 = cloud2;
-    desc1 = desc2;
-    img2.copyTo(img1);
-    keyPointVec1 = keyPointVec2;
+    #if UPDATE_EVERYTIME == 1
+	    cloud1 = cloud2;
+	    desc1 = desc2;
+	    img2.copyTo(img1);
+	    keyPointVec1 = keyPointVec2;
+    #endif
+    
     
     return result;
 }
 
-
-
+void MonocularOdometry::pushImage() {
+	cloud1 = cloud2;
+    desc1 = desc2;
+    img2.copyTo(img1);
+    keyPointVec1 = keyPointVec2;
+}

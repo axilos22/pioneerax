@@ -9,6 +9,8 @@
 #include "camera/eucm.h"
 #include "epipolar.h"
 
+#define UPDATE_EVERYTIME 0
+
 //TODO add replace function to replace the ref image
 
 class MonocularOdometry
@@ -20,13 +22,15 @@ public:
     camera(cameraParams.data()), status(EMPTY) {}
     virtual ~MonocularOdometry () {}
     Transformation<double> feedImage(const cv::Mat & img);
+    void pushImage();    
     
 private:
     Status status;
     EnhancedCamera camera;
-    cv::Mat desc1, img1;
-    vector<Vector3d> cloud1;
-    vector<cv::KeyPoint> keyPointVec1;
+    cv::Mat desc1, desc2, img1, img2;
+    vector<Vector3d> cloud1, cloud2;
+    vector<cv::KeyPoint> keyPointVec1, keyPointVec2;
+    vector<Vector2d> pointVec2;
     MotionEstimator motion;
 };
 

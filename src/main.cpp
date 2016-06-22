@@ -23,20 +23,21 @@
 #define CONNECTION_FAILED_CODE 2
 #define VERBOSE 1
 #define RECORD_CSV 1
-#define LOOP 500
+#define LOOP 700
 #define CAM_DEFAULT_ID 0
 
 using namespace std;
 
-const double circleRadius = 700,//mm
-angularSpeed = .2,//rad/s
+const double circleRadius = 1000,//mm
+angularSpeed = .3,//rad/s
 errorGain = 0.2,  //gain applied to error
 distance2center = 105, //distance to the controller point of the robot
 Kp = .2; //proportional gain
 const std::string recordFilePath = "record.txt",
 recordFileHeader = "time x y th x_d y_d x_e y_e camRx camRy camRz\n";
+//~ recordFileHeader = "time th camRy err\n";
 std::ofstream recordFile;
-const std::vector<double> camParam = { 0.734966,1.01564,239.228,238.882,319.815,237.017};
+const std::vector<double> camParam = {0.734966,1.01564,239.228,238.882,319.815,237.017};
 
 void recordData(std::vector<double> data) {
 	for(int rank=0;rank<data.size();rank++) {
@@ -107,15 +108,18 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
 		Eigen::Vector2d v_w = controller.computeCommands(desiredPositionDot);
 		rh.setCommand(v_w(0),v_w(1));
 		//VISION PART
-		//TODO implement the image replacement element
 		//TODO fuse the image replacement with some travelled distance
 		if (loop % voLoopCount == 0)
 		{
 			cv::Mat frame = cam.read();
 			voPose = voPose.compose(odom.feedImage(frame));
-			voPose.normalize();
+			voPose.normalize();			
 			Vector3<double> camTrans = voPose.trans();
 			Vector3<double> camRot = voPose.rot();
+			double camYRot = camRot(1);
+			if(camYRot>.1) {
+				odom.pushImage();
+			}
 			/*cv::waitKey(100);*/
 			//RECORD PART			
 			recordedData.push_back(time);
@@ -128,9 +132,13 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
 	        recordedData.push_back(positionErr(1));
 			recordedData.push_back(camRot(0));
 			recordedData.push_back(camRot(1));
-			recordedData.push_back(camRot(2));        
-			recordData(recordedData);			
+			//camrot neg compared to th
+			//~ double err1 = robotPose(2)-(-camRot(1));			
+			//~ recordedData.push_back(abs(err1));
+			recordedData.push_back(camRot(2));        					
+			recordData(recordedData);
 		} else {
+			/*
 			recordedData.push_back(time);
 			recordedData.push_back(robotPose(0));
 	        recordedData.push_back(robotPose(1));
@@ -139,10 +147,12 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
 			recordedData.push_back(desiredPosition(1));
 			recordedData.push_back(positionErr(0));
 	        recordedData.push_back(positionErr(1));
-	        recordedData.push_back(-1);
-	        recordedData.push_back(-1);
-	        recordedData.push_back(-1);
-		}
+	        recordedData.push_back(0);
+	        recordedData.push_back(0);
+	        recordedData.push_back(0);
+	        recordData(recordedData);
+	        * */
+		}		
         loop++;
     }
 }
@@ -155,6 +165,7 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
  */
 int main(int argc, char** argv) {
 	recordFile.open(recordFilePath);
+	std::cout << "recording into: " << recordFilePath << std::endl;
 	recordFile << recordFileHeader;
 	Robothandler rh(argc,argv);	
 	int retCode = rh.connection();
