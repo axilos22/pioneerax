@@ -16,6 +16,7 @@ class CircularTrajectory
 {
 public:
     double m_radius, m_angularSpeed;
+    double time0;
     Eigen::Vector2d m_desiredPosition,m_desiredPositionDot;
     CircularTrajectory(double radius, double angularSpeed);
     void computeDesired(const double time);

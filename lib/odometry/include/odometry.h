@@ -9,6 +9,8 @@
 #include "camera/eucm.h"
 #include "epipolar.h"
 
+//TODO add replace function to replace the ref image
+
 class MonocularOdometry
 {
     enum Status {EMPTY, READY};

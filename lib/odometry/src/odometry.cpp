@@ -47,10 +47,10 @@ Transformation<double> MonocularOdometry::feedImage(const Mat & img2)
             xVec2.push_back(cloud2[match.trainIdx]);
         }
        
-        cv::Mat matchImg;
-        cv::drawMatches(img1, keyPointVec1, img2, keyPointVec2, matchVec, matchImg);
-        
-        imshow("matchImg", matchImg);
+        //~ cv::Mat matchImg;
+        //~ cv::drawMatches(img1, keyPointVec1, img2, keyPointVec2, matchVec, matchImg);
+        //~ 
+        //~ imshow("matchImg", matchImg);
        
         vector<bool> mask;
         Matrix3d E;
@@ -59,9 +59,8 @@ Transformation<double> MonocularOdometry::feedImage(const Mat & img2)
         vector<Transformation<double>> xiVec2;
         
         motion.extractMotion(E, xiVec2);
-        
-        int xiIdx = motion.pickGoodMotion(xiVec2, cloud1, cloud2);
-        result = xiVec2[xiIdx];
+        if (xiVec2[0].rot().norm() < xiVec2[1].rot().norm()) result = xiVec2[0];
+        else result = xiVec2[1];
         break;
     }
     

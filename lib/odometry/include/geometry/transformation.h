@@ -46,7 +46,13 @@ public:
     Transformation(T x, T y, T z, T qx, T qy, T qz, T qw)
     : mtrans(x, y, z), mrot(Quaternion<T>(qx, qy, qz, qw).toRotationVector()) {}
 
-
+	void normalize()
+	{
+		T th = mrot.norm();
+		if (th < M_PI) return;
+		T thNorm = atan2(sin(th), cos(th));
+		mrot *= thNorm / th;
+	}
 
     void setParam(Vector3<T> & newTrans, Vector3<T> & newRot)
     {
