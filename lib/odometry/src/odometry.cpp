@@ -68,7 +68,7 @@ Transformation<double> MonocularOdometry::feedImage(const Mat & i_img2)
 }
 
 void MonocularOdometry::pushImage() {
-	cv::imwrite("newRef"+to_string(newRefFrameCounter)+".jpg",img2);
+	cv::imwrite("img/newRef"+to_string(newRefFrameCounter)+".jpg",img2);
 	newRefFrameCounter++;
 	cloud1 = cloud2;
     desc2.copyTo(desc1);

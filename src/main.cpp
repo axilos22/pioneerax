@@ -81,6 +81,9 @@ void squareTrajectory(Robothandler &rh) {
 }
 
 void doCircularTrajectory(Robothandler& rh,const double& radius,const double& angularSpeed) {
+	//recorder
+	recordFile.open("recordCircularTraj.txt");
+	recordFile << "time x y z x_d y_d x_e y_e\n";
 	//traj & control
     CircularTrajectory ct(radius,angularSpeed);      
     Controller controller(Kp,distance2center);
@@ -134,33 +137,37 @@ void odometryTeleop(Robothandler& rh) {
     CamHandler cam(CAM_DEFAULT_ID);
     MonocularOdometry odom(camParam);
 	rh.teleop();
-	ofstream myfile;
-	myfile.open ("example.txt");
-	myfile.close();
+	recordFile.open("recordOdometry.txt");
+	recordFile << "# time x y th -camRY\n";
 	Transformation<double> voPose;
 	Vector3d woPose;
-    while(1) {
+	int loop=0;
+    while(1) {		
 		cv::Mat frame = cam.read();//get frame from the camera
 		Transformation<double> deltaVoPose = odom.feedImage(frame);//feed frame to the odometry
 		Eigen::Vector3d robotPose = rh.getPoseEigen();//get the pose of the robot
 		Vector3d deltaWoPose = robotPose - woPose;//compute delta between ref pose of ref frame and current pose
 		deltaWoPose(2) = 0;//discard orientation in norm
 		if(deltaVoPose.rot().norm() > ODOM_TURNING_THRESHOLD or deltaWoPose.norm() > ODOM_DISPLACEMENT_THRESHOLD) {
+			std::vector<double> recordedData;
 			woPose = robotPose;//update pose of the ref frame
-			myfile.open ("example.txt",ios::app);
 			odom.pushImage();
 			voPose = voPose.compose(deltaVoPose);
 	        voPose.normalize();			
 		    Vector3<double> camTrans = voPose.trans();
-		    Vector3<double> camRot = voPose.rot();                
-		    myfile << setw(15) << rh.getTime()->mSecSince()/1000.0 << setw(15)
-	        << robotPose(2) << setw(15)
-			<< -camRot(1) << endl;
-			myfile.close();
+		    Vector3<double> camRot = voPose.rot();
+		    recordedData.push_back(loop);
+		    recordedData.push_back(rh.getTime()->mSecSince()/1000.0 );
+		    recordedData.push_back(robotPose(0) );
+		    recordedData.push_back(robotPose(1) );
+		    recordedData.push_back(robotPose(2) );
+		    recordedData.push_back(-camRot(1));
+		    recordData(recordedData);
+		    loop++;
 		}
-
-		ArUtil::sleep(10);
+		ArUtil::sleep(10);//10ms tempo
     }
+    cout << "Odom terminated, " << loop << " executed.";
 }
 /**
  * @brief main main of the program. Intenally it use a Robothandler and a Trajectory. Both classes have linkages
@@ -171,9 +178,9 @@ void odometryTeleop(Robothandler& rh) {
  */
 int main(int argc, char** argv) {    
 
-	recordFile.open(recordFilePath);
-	std::cout << "recording into: " << recordFilePath << std::endl;
-	recordFile << recordFileHeader;
+	//~ recordFile.open(recordFilePath);
+	//~ std::cout << "recording into: " << recordFilePath << std::endl;
+	//~ recordFile << recordFileHeader;
 	Robothandler rh(argc,argv);	
 	int retCode = rh.connection();
     if(!retCode) { //if we connected
