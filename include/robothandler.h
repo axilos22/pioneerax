@@ -19,9 +19,9 @@ public:
     ArRobotConnector* m_robotConnector;
     ArLaserConnector* m_laserConnector;
     ArTime* m_time;
-    ArKeyHandler* m_keyHandler;
-    Robothandler(int argc, char** argv);
+    ArKeyHandler* m_keyHandler;    
     //functions
+    Robothandler(int argc, char** argv);
     int connection();
     int disconnection();
     void getInitialData();
@@ -40,6 +40,7 @@ public:
     void prepareToMove();
     double rad2degree(double radValue);
     double degree2rad(double degValue);
+    void teleop();
 };
 
 #endif // ROBOTHANDLER_H

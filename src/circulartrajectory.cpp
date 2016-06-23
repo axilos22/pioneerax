@@ -10,8 +10,8 @@ void CircularTrajectory::computeDesired(const double actualTime)
 {
 	double time = actualTime - time0;
     //compute position
-    //~ m_desiredPosition(0)= m_radius*(cos(m_angularSpeed*time) - 1);
-    m_desiredPosition(0)= m_radius*(cos(m_angularSpeed*time));
+    //m_desiredPosition(0)= m_radius*(cos(m_angularSpeed*time));
+    m_desiredPosition(0)= m_radius*(cos(m_angularSpeed*time) - 1); //so that the trajectory go through 0
     m_desiredPosition(1)= m_radius*sin(m_angularSpeed*time);
     //compute derivative
     m_desiredPositionDot(0)=-m_angularSpeed*m_radius*sin(m_angularSpeed*time);

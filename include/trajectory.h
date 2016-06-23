@@ -9,9 +9,6 @@
 #include <iostream>
 
 //EIGEN
-//~ #include <eigen3/Eigen/Dense>
-//~ #include <eigen3/Eigen/Core>
-//~ #include <Eigen/Eigen>
 #include <Eigen/Dense>
 
 class Trajectory

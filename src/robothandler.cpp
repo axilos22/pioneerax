@@ -1,4 +1,8 @@
+#include <iostream>
+
 #include "../include/robothandler.h"
+
+using namespace std;
 /**
  * @brief Robothandler::Robothandler constructor, need the information from command line to execute properly.
  * @param argc main input
@@ -65,7 +69,7 @@ void Robothandler::getInitialData(){
 
     //sleep for 3s
     ArLog::log(ArLog::Normal,"Ax-example: sleeping 3s");
-    ArUtil::sleep(3000);
+    ArUtil::sleep(1000);
 
     //ending robot thread
     //m_robot->stopRunning();
@@ -270,4 +274,52 @@ double Robothandler::rad2degree(double radValue)
 double Robothandler::degree2rad(double degValue)
 {
     return (degValue*M_PI)/180.0;
+}
+
+	
+	// limiter for close obstacles
+	ArActionLimiterForwards limiter("speed limiter near", 300, 600, 250);
+	// limiter for far away obstacles
+	ArActionLimiterForwards limiterFar("speed limiter far", 300, 1100, 400);
+	// limiter that checks IR sensors (like Peoplebot has)
+	ArActionLimiterTableSensor tableLimiter;
+	// limiter so we don't bump things backwards
+	ArActionLimiterBackwards backwardsLimiter;	
+	// the joydrive action
+	ArActionJoydrive joydriveAct;
+	// the keydrive action
+	ArActionKeydrive keydriveAct;
+
+void Robothandler::teleop() {
+
+	ArLog::log(ArLog::Normal,"Start teleoperating sequence...");
+	// if we don't have a joystick, let 'em know
+	if (!joydriveAct.joystickInited())
+	printf("Do not have a joystick, only the arrow keys on the keyboard will work.\n");
+	
+	// add the sonar to the robot
+	m_robot->addRangeDevice(m_sonar);
+	// set the robots maximum velocity (sonar don't work at all well if you're going faster)
+	m_robot->setAbsoluteMaxTransVel(400);
+	// enable the motor
+	m_robot->enableMotors();
+	
+	// Add the actions, with the limiters as highest priority, then the teleop.
+	// actions.  This will keep the teleop. actions from being able to drive too 
+	// fast and hit something
+	m_robot->addAction(&tableLimiter, 100);
+	m_robot->addAction(&limiter, 95);
+	m_robot->addAction(&limiterFar, 90);
+	m_robot->addAction(&backwardsLimiter, 85);
+	m_robot->addAction(&joydriveAct, 50);
+	m_robot->addAction(&keydriveAct, 45);
+	
+	// Configure the joydrive action so it will let the lower priority actions
+	// (i.e. keydriveAct) request motion if the joystick button is
+	// not pressed.
+	joydriveAct.setStopIfNoButtonPressed(false);
+	
+	// run the robot, true means that the run will exit if connection lost
+	//~ m_robot->run(true);
+	prepareToMove();
 }

@@ -28,9 +28,9 @@ private:
     Status status;
     EnhancedCamera camera;
     cv::Mat desc1, desc2, img1, img2;
+    int newRefFrameCounter=0;
     vector<Vector3d> cloud1, cloud2;
     vector<cv::KeyPoint> keyPointVec1, keyPointVec2;
-    vector<Vector2d> pointVec2;
     MotionEstimator motion;
 };
 
