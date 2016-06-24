@@ -24,7 +24,7 @@
 #define CONNECTION_FAILED_CODE 2
 #define VERBOSE 1
 #define RECORD_CSV 1
-#define LOOP 500
+#define LOOP 2000
 #define CAM_DEFAULT_ID 0
 
 using namespace std;
@@ -32,12 +32,12 @@ using namespace std;
 const double displacementThreshold = 200;//mm
 const double turningThreshold = .5;//rad
 //circular traj parameters
-const double circleRadius = 1200;//mm
+const double circleRadius = 1000;//mm
 const double angularSpeed = .3;//rad/s
 //Robot control parameter
 const double distance2center = 134; //distance to the controller point of the robot
 const double d = 200;
-const double Kp = .3; //proportional gain
+const double Kp = .2; //proportional gain
 const std::string recordFilePath = "record.txt",
 recordFileHeader = "time x y th x_d y_d x_e y_e camRx camRy camRz\n";
 //~ recordFileHeader = "time th camRy err\n";
@@ -85,7 +85,7 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
 	//recorder
 	recordFile.open("recordCircularTraj.txt");
 	recordFile << "R=" << radius << " w=" << angularSpeed << " d=" << distance2center  <<" Kp=" << Kp <<"\n";
-	recordFile << "# time x y th x_d y_d x_e y_e\n";
+	recordFile << "# time xR yR thR xC yC x_d y_d x_e y_e\n";
 	//traj & control
     CircularTrajectory ct(radius,angularSpeed);      
     Controller controller(Kp, d, distance2center);
@@ -121,6 +121,7 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
 		controller.computeError(desiredPosition);
 		Eigen::Vector2d positionErr = controller.getPositionError();
 		Eigen::Vector2d v_w = controller.computeCommands(desiredPositionDot);
+		Eigen::Vector2d cPosition = controller.getControlledPosition();
 		rh.setCommand(v_w(0),v_w(1));
 		//RECCORD
 		recordedData.push_back(loop);
@@ -128,6 +129,8 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
 	    recordedData.push_back(robotPose(0));
 		recordedData.push_back(robotPose(1));
 	    recordedData.push_back(robotPose(2));
+	    recordedData.push_back(cPosition(0));
+	    recordedData.push_back(cPosition(1));
 	    recordedData.push_back(desiredPosition(0));
 	    recordedData.push_back(desiredPosition(1));
 	    recordedData.push_back(positionErr(0));
@@ -182,10 +185,6 @@ void odometryTeleop(Robothandler& rh) {
  * @return return code (check defines).
  */
 int main(int argc, char** argv) {    
-
-	//~ recordFile.open(recordFilePath);
-	//~ std::cout << "recording into: " << recordFilePath << std::endl;
-	//~ recordFile << recordFileHeader;
 	Robothandler rh(argc,argv);	
 	int retCode = rh.connection();
     if(!retCode) { //if we connected
