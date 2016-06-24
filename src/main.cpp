@@ -24,19 +24,20 @@
 #define CONNECTION_FAILED_CODE 2
 #define VERBOSE 1
 #define RECORD_CSV 1
-#define LOOP 700
+#define LOOP 500
 #define CAM_DEFAULT_ID 0
-//odometry parameters
-#define ODOM_DISPLACEMENT_THRESHOLD 500
-#define ODOM_TURNING_THRESHOLD .5
 
 using namespace std;
-
-const double circleRadius = 1000,//mm
-angularSpeed = .3,//rad/s
-errorGain = 0.1,  //gain applied to error
-distance2center = 105, //distance to the controller point of the robot
-Kp = .2; //proportional gain
+//odometry parameters
+const double displacementThreshold = 200;//mm
+const double turningThreshold = .5;//rad
+//circular traj parameters
+const double circleRadius = 1200;//mm
+const double angularSpeed = .3;//rad/s
+//Robot control parameter
+const double distance2center = 134; //distance to the controller point of the robot
+const double d = 200;
+const double Kp = .3; //proportional gain
 const std::string recordFilePath = "record.txt",
 recordFileHeader = "time x y th x_d y_d x_e y_e camRx camRy camRz\n";
 //~ recordFileHeader = "time th camRy err\n";
@@ -83,10 +84,11 @@ void squareTrajectory(Robothandler &rh) {
 void doCircularTrajectory(Robothandler& rh,const double& radius,const double& angularSpeed) {
 	//recorder
 	recordFile.open("recordCircularTraj.txt");
-	recordFile << "time x y z x_d y_d x_e y_e\n";
+	recordFile << "R=" << radius << " w=" << angularSpeed << " d=" << distance2center  <<" Kp=" << Kp <<"\n";
+	recordFile << "# time x y th x_d y_d x_e y_e\n";
 	//traj & control
     CircularTrajectory ct(radius,angularSpeed);      
-    Controller controller(Kp,distance2center);
+    Controller controller(Kp, d, distance2center);
     //robot
     rh.makeKeyHandler();
     rh.prepareToMove();        
@@ -103,15 +105,17 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
     Vector3d woPose;
     const int voLoopCount = 5;
     while(Aria::getRunning() && loop < LOOP) {
+        //ODOM
+        //no odometry for now
 		//CONTROL PART
-        cout << "### iteration number " << loop << endl;
+        //~ cout << "### iteration number " << loop << endl;
 		std::vector<double> recordedData;
         double time = rh.getTime()->mSecSince()/1000.0;        
         Eigen::Vector3d robotPose = rh.getPoseEigen();
-        cout << "robot pose" << robotPose.transpose() << endl; 
+        //~ cout << "robot pose" << robotPose.transpose() << endl; 
         ct.computeDesired(time);
         Eigen::Vector2d desiredPosition = ct.desiredPosition();
-        cout << "desired pose " << desiredPosition << endl;
+        //~ cout << "desired pose " << desiredPosition << endl;
 		Eigen::Vector2d desiredPositionDot = ct.desiredPositionDot();        
 		controller.updateRobotPose(robotPose);
 		controller.computeError(desiredPosition);
@@ -119,6 +123,7 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
 		Eigen::Vector2d v_w = controller.computeCommands(desiredPositionDot);
 		rh.setCommand(v_w(0),v_w(1));
 		//RECCORD
+		recordedData.push_back(loop);
 	    recordedData.push_back(time);
 	    recordedData.push_back(robotPose(0));
 		recordedData.push_back(robotPose(1));
@@ -148,7 +153,7 @@ void odometryTeleop(Robothandler& rh) {
 		Eigen::Vector3d robotPose = rh.getPoseEigen();//get the pose of the robot
 		Vector3d deltaWoPose = robotPose - woPose;//compute delta between ref pose of ref frame and current pose
 		deltaWoPose(2) = 0;//discard orientation in norm
-		if(deltaVoPose.rot().norm() > ODOM_TURNING_THRESHOLD or deltaWoPose.norm() > ODOM_DISPLACEMENT_THRESHOLD) {
+		if(deltaVoPose.rot().norm() > turningThreshold or deltaWoPose.norm() > displacementThreshold) {
 			std::vector<double> recordedData;
 			woPose = robotPose;//update pose of the ref frame
 			odom.pushImage();
@@ -184,15 +189,15 @@ int main(int argc, char** argv) {
 	Robothandler rh(argc,argv);	
 	int retCode = rh.connection();
     if(!retCode) { //if we connected
-		//~ doCircularTrajectory(rh,circleRadius,angularSpeed);
-		odometryTeleop(rh);		       
+		doCircularTrajectory(rh,circleRadius,angularSpeed);
+		//odometryTeleop(rh);		       
         rh.disconnection();
     } else {
         ArLog::log(ArLog::Normal, "Ax-Example@main: Unable to connect to robot. Abort");
         Aria::exit(CONNECTION_FAILED_CODE);
         return CONNECTION_FAILED_CODE;
     }
-    Aria::exit(SUCCESSFUL_EXE_CODE);
-    return SUCCESSFUL_EXE_CODE;
     recordFile.close();
+    Aria::exit(SUCCESSFUL_EXE_CODE);
+    return SUCCESSFUL_EXE_CODE;    
 }

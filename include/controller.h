@@ -12,9 +12,11 @@
 class Controller
 {
 private:
-    double m_kp,
-    m_d;
+    double m_kp;
+    double m_d;
+    double m_center;
     Eigen::Vector2d m_positionError;
+    Eigen::Vector2d m_controlledPosition;
     Eigen::Vector3d m_robotPose, m_initialPose;
 public:
     /**
@@ -22,7 +24,7 @@ public:
      * @param Kp Propotional gain
      * @param d distance to the controlled point
      */
-    Controller(double Kp, double d=0);
+    Controller(double Kp, double d, double center);
     /**
      * @brief updateRobotPose update the pose of the robot
      * @param robotPose pose used for the update
@@ -41,6 +43,7 @@ public:
     void setInitialPose(double x0,double y0, double th0);
     Eigen::Vector2d getPositionError();
     ~Controller();
+    Eigen::Vector2d getControlledPosition();
 };
 
 #endif // CONTROLLER_H

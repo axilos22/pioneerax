@@ -8,7 +8,7 @@
 class MotionEstimator
 {
 public:
-    MotionEstimator () : thresh(3e-3), maxIter(300) {}
+    MotionEstimator () : thresh(3e-3), maxIter(700) {}
     MotionEstimator (double threshold) : thresh(threshold) {}
     virtual ~MotionEstimator () {}
     
