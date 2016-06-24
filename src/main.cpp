@@ -83,9 +83,9 @@ void squareTrajectory(Robothandler &rh) {
 
 void doCircularTrajectory(Robothandler& rh,const double& radius,const double& angularSpeed) {
 	//recorder
-	recordFile.open("recordCircularTraj.txt");
+	recordFile.open("recordCircularTrajODOM.txt");
 	recordFile << "R=" << radius << " w=" << angularSpeed << " d=" << distance2center  <<" Kp=" << Kp <<"\n";
-	recordFile << "# time x y th x_d y_d x_e y_e\n";
+	recordFile << "loop time x y th (-camRotY)\n";
 	//traj & control
     CircularTrajectory ct(radius,angularSpeed);      
     Controller controller(Kp, d, distance2center);
@@ -104,37 +104,47 @@ void doCircularTrajectory(Robothandler& rh,const double& radius,const double& an
     Transformation<double> voPose;
     Vector3d woPose;
     const int voLoopCount = 5;
-    while(Aria::getRunning() && loop < LOOP) {
-        //ODOM
-        //no odometry for now
+    while(Aria::getRunning() && loop < LOOP) {        
 		//CONTROL PART
-        //~ cout << "### iteration number " << loop << endl;
+        cout << "### iteration number " << loop << endl;
 		std::vector<double> recordedData;
         double time = rh.getTime()->mSecSince()/1000.0;        
         Eigen::Vector3d robotPose = rh.getPoseEigen();
-        //~ cout << "robot pose" << robotPose.transpose() << endl; 
+        cout << "robot pose" << robotPose.transpose() << endl; 
         ct.computeDesired(time);
         Eigen::Vector2d desiredPosition = ct.desiredPosition();
-        //~ cout << "desired pose " << desiredPosition << endl;
+        cout << "desired pos " << desiredPosition << endl;
 		Eigen::Vector2d desiredPositionDot = ct.desiredPositionDot();        
 		controller.updateRobotPose(robotPose);
 		controller.computeError(desiredPosition);
 		Eigen::Vector2d positionErr = controller.getPositionError();
 		Eigen::Vector2d v_w = controller.computeCommands(desiredPositionDot);
 		rh.setCommand(v_w(0),v_w(1));
-		//RECCORD
-		recordedData.push_back(loop);
-	    recordedData.push_back(time);
-	    recordedData.push_back(robotPose(0));
-		recordedData.push_back(robotPose(1));
-	    recordedData.push_back(robotPose(2));
-	    recordedData.push_back(desiredPosition(0));
-	    recordedData.push_back(desiredPosition(1));
-	    recordedData.push_back(positionErr(0));
-		recordedData.push_back(positionErr(1));
-		recordData(recordedData);	
-        loop++;
-    }
+		cout << v_w << endl;
+		//ODOM
+        cv::Mat frame = cam.read();//get frame from the camera
+		Transformation<double> deltaVoPose = odom.feedImage(frame);//feed frame to the odometry
+		Vector3d deltaWoPose = robotPose - woPose;//compute delta between ref pose of ref frame and current pose
+		deltaWoPose(2) = 0;//discard orientation in norm
+		if(deltaVoPose.rot().norm() > turningThreshold or deltaWoPose.norm() > displacementThreshold) {
+			std::vector<double> recordedData;
+			woPose = robotPose;//update pose of the ref frame
+			odom.pushImage();
+			voPose = voPose.compose(deltaVoPose);
+	        voPose.normalize();			
+		    Vector3<double> camTrans = voPose.trans();
+		    Vector3<double> camRot = voPose.rot();
+		    //RECORD
+		    recordedData.push_back(loop);
+		    recordedData.push_back(rh.getTime()->mSecSince()/1000.0 );
+		    recordedData.push_back(robotPose(0) );
+		    recordedData.push_back(robotPose(1) );
+		    recordedData.push_back(robotPose(2) );
+		    recordedData.push_back(-camRot(1));
+		    recordData(recordedData);		    
+		}
+		loop++;
+	}
 }
 
 void odometryTeleop(Robothandler& rh) {
@@ -143,7 +153,7 @@ void odometryTeleop(Robothandler& rh) {
     MonocularOdometry odom(camParam);
 	rh.teleop();
 	recordFile.open("recordOdometry.txt");
-	recordFile << "# time x y th -camRY\n";
+	recordFile << "loop time x y th (-camRY)\n";
 	Transformation<double> voPose;
 	Vector3d woPose;
 	int loop=0;
@@ -182,10 +192,6 @@ void odometryTeleop(Robothandler& rh) {
  * @return return code (check defines).
  */
 int main(int argc, char** argv) {    
-
-	//~ recordFile.open(recordFilePath);
-	//~ std::cout << "recording into: " << recordFilePath << std::endl;
-	//~ recordFile << recordFileHeader;
 	Robothandler rh(argc,argv);	
 	int retCode = rh.connection();
     if(!retCode) { //if we connected
