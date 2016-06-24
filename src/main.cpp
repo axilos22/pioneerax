@@ -84,8 +84,8 @@ void squareTrajectory(Robothandler &rh) {
 void doCircularTrajectory(Robothandler& rh,const double& radius,const double& angularSpeed) {
 	//recorder
 	recordFile.open("recordCircularTraj.txt");
-	recordFile << "R=" << radius << " w=" << angularSpeed << " d=" << distance2center  <<" Kp=" << Kp <<"\n";
-	recordFile << "# time xR yR thR xC yC x_d y_d x_e y_e\n";
+	recordFile << "R=" << radius << " w=" << angularSpeed << " d=" << d << " center=" <<distance2center<<" Kp=" << Kp <<"\n";
+	recordFile << "loop time xR yR thR xC yC x_d y_d x_e y_e\n";
 	//traj & control
     CircularTrajectory ct(radius,angularSpeed);      
     Controller controller(Kp, d, distance2center);
@@ -146,7 +146,7 @@ void odometryTeleop(Robothandler& rh) {
     MonocularOdometry odom(camParam);
 	rh.teleop();
 	recordFile.open("recordOdometry.txt");
-	recordFile << "# time x y th -camRY\n";
+	recordFile << "loop time x y th (-camRY)\n";
 	Transformation<double> voPose;
 	Vector3d woPose;
 	int loop=0;
@@ -175,7 +175,6 @@ void odometryTeleop(Robothandler& rh) {
 		}
 		ArUtil::sleep(10);//10ms tempo
     }
-    cout << "Odom terminated, " << loop << " executed.";
 }
 /**
  * @brief main main of the program. Intenally it use a Robothandler and a Trajectory. Both classes have linkages
@@ -188,8 +187,8 @@ int main(int argc, char** argv) {
 	Robothandler rh(argc,argv);	
 	int retCode = rh.connection();
     if(!retCode) { //if we connected
-		doCircularTrajectory(rh,circleRadius,angularSpeed);
-		//odometryTeleop(rh);		       
+		//~ doCircularTrajectory(rh,circleRadius,angularSpeed);
+		odometryTeleop(rh);		       
         rh.disconnection();
     } else {
         ArLog::log(ArLog::Normal, "Ax-Example@main: Unable to connect to robot. Abort");
